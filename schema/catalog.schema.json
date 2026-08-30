@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/404404/UniFi_Catalog/schema/catalog.schema.json",
+  "title": "UniFi Catalog bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "models"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "models": {
+      "type": "array",
+      "items": {"$ref": "model.schema.json"}
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "id": "official-udw-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "UDW",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/cloud-gateways/udw",
+      "publisher": "Ubiquiti",
+      "title": "UniFi Dream Wall - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official port layout, PoE classes and power/storage specifications. The page does not establish a physical fan count."
+    }
+  ],
+  "fields_supported": ["canonical_sku", "display_name", "processor", "ports.topology", "ports.max_speed_mbps", "ports.poe", "storage", "power"],
+  "notes": "Runtime model identifiers are intentionally not inferred from this static page."
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "canonical_sku": "US-XG-6POE",
+  "display_name": "XG 6 PoE (Gen1)",
+  "device_type": "switch",
+  "official_evidence_ids": ["official-us-xg-6poe-techspecs-20260830"],
+  "runtime_identifiers": {"api_model": [], "sysid": [], "ssh_model": []},
+  "ports": {"complete": true, "items": [
+    {"index": 1, "label": "RJ45-1", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 10000, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 60, "combo_group": null},
+    {"index": 2, "label": "RJ45-2", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 10000, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 60, "combo_group": null},
+    {"index": 3, "label": "RJ45-3", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 10000, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 60, "combo_group": null},
+    {"index": 4, "label": "RJ45-4", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 10000, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 60, "combo_group": null},
+    {"index": 5, "label": "SFP+-1", "connector": "sfp_plus", "roles": ["lan"], "max_speed_mbps": 10000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+    {"index": 6, "label": "SFP+-2", "connector": "sfp_plus", "roles": ["lan"], "max_speed_mbps": 10000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null}
+  ]},
+  "storage": {"complete": false, "items": []},
+  "power": {"source_type": "dc_or_external_adapter", "psu_slots": null, "max_power_w": 40, "poe_budget_w": 170},
+  "fans": {"status": "unknown", "count": null}
+}

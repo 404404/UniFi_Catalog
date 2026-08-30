@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "processor": {"model": null, "architecture": "ARM Cortex-A57", "cores": 4, "clock_mhz": 1700},
+  "canonical_sku": "UDW",
+  "display_name": "Dream Wall",
+  "device_type": "gateway",
+  "official_evidence_ids": ["official-udw-techspecs-20260830"],
+  "runtime_identifiers": {"api_model": [], "sysid": [], "ssh_model": []},
+  "ports": {
+    "complete": true,
+    "items": [
+      {"index": 1, "label": "RJ45-1", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 60, "combo_group": null},
+      {"index": 2, "label": "RJ45-2", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 60, "combo_group": null},
+      {"index": 3, "label": "RJ45-3", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 60, "combo_group": null},
+      {"index": 4, "label": "RJ45-4", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 60, "combo_group": null},
+      {"index": 5, "label": "RJ45-5", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe+", "poe_max_power_w": 30, "combo_group": null},
+      {"index": 6, "label": "RJ45-6", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe+", "poe_max_power_w": 30, "combo_group": null},
+      {"index": 7, "label": "RJ45-7", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe+", "poe_max_power_w": 30, "combo_group": null},
+      {"index": 8, "label": "RJ45-8", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe+", "poe_max_power_w": 30, "combo_group": null},
+      {"index": 9, "label": "RJ45-9", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe", "poe_max_power_w": 15.4, "combo_group": null},
+      {"index": 10, "label": "RJ45-10", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe", "poe_max_power_w": 15.4, "combo_group": null},
+      {"index": 11, "label": "RJ45-11", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe", "poe_max_power_w": 15.4, "combo_group": null},
+      {"index": 12, "label": "RJ45-12", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": true, "poe_standard": "poe", "poe_max_power_w": 15.4, "combo_group": null},
+      {"index": 13, "label": "RJ45-13", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+      {"index": 14, "label": "RJ45-14", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+      {"index": 15, "label": "RJ45-15", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+      {"index": 16, "label": "RJ45-16", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+      {"index": 17, "label": "RJ45-17", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+      {"index": 18, "label": "RJ45-18", "connector": "rj45", "roles": ["lan", "wan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+      {"index": 19, "label": "SFP+-1", "connector": "sfp_plus", "roles": ["lan", "wan"], "max_speed_mbps": 10000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+      {"index": 20, "label": "SFP+-2", "connector": "sfp_plus", "roles": ["lan", "wan"], "max_speed_mbps": 10000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null}
+    ]
+  },
+  "storage": {
+    "complete": true,
+    "items": [
+      {"type": "emmc", "kind": "fixed_device", "default_presence": "present", "capacity_bytes": 16000000000, "max_capacity_bytes": null},
+      {"type": "ssd", "kind": "fixed_device", "default_presence": "present", "capacity_bytes": 128000000000, "max_capacity_bytes": null},
+      {"type": "microsd", "kind": "removable_media", "default_presence": "present", "capacity_bytes": 512000000000, "max_capacity_bytes": null}
+    ]
+  },
+  "power": {"source_type": "integrated_ac", "psu_slots": 2, "max_power_w": 532, "poe_budget_w": 420},
+  "fans": {"status": "unknown", "count": null}
+}

@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "model_count": 15,
+  "models": [
+    {
+      "canonical_sku": "U6-Enterprise-IW",
+      "display_name": "U6 Enterprise In-Wall",
+      "device_type": "ap",
+      "source_file": "models/u6-enterprise-iw.json",
+      "port_count": 5,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "U6-IW",
+      "display_name": "U6 In-Wall",
+      "device_type": "ap",
+      "source_file": "models/u6-iw.json",
+      "port_count": 5,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "U6-Mesh",
+      "display_name": "U6 Mesh",
+      "device_type": "ap",
+      "source_file": "models/u6-mesh.json",
+      "port_count": 1,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "UAP-AC-M",
+      "display_name": "AC Mesh",
+      "device_type": "ap",
+      "source_file": "models/uap-ac-m.json",
+      "port_count": 1,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "UAP-IW-HD",
+      "display_name": "In-Wall HD",
+      "device_type": "ap",
+      "source_file": "models/uap-iw-hd.json",
+      "port_count": 5,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "UCG-Max",
+      "display_name": "Cloud Gateway Max",
+      "device_type": "gateway",
+      "source_file": "models/ucg-max.json",
+      "port_count": 5,
+      "ports_complete": true,
+      "storage_complete": true,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "UDW",
+      "display_name": "Dream Wall",
+      "device_type": "gateway",
+      "source_file": "models/udw.json",
+      "port_count": 20,
+      "ports_complete": true,
+      "storage_complete": true,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "US-XG-6POE",
+      "display_name": "XG 6 PoE (Gen1)",
+      "device_type": "switch",
+      "source_file": "models/us-xg-6poe.json",
+      "port_count": 6,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Enterprise-8-PoE",
+      "display_name": "Enterprise 8 PoE (Vintage)",
+      "device_type": "switch",
+      "source_file": "models/usw-enterprise-8-poe.json",
+      "port_count": 10,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Flex",
+      "display_name": "Flex",
+      "device_type": "switch",
+      "source_file": "models/usw-flex.json",
+      "port_count": 5,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Flex-2.5G-5",
+      "display_name": "Flex Mini 2.5G",
+      "device_type": "switch",
+      "source_file": "models/usw-flex-2.5g-5.json",
+      "port_count": 5,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Flex-2.5G-8-PoE",
+      "display_name": "Flex 2.5G PoE",
+      "device_type": "switch",
+      "source_file": "models/usw-flex-2.5g-8-poe.json",
+      "port_count": 10,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Flex-Mini",
+      "display_name": "Flex Mini",
+      "device_type": "switch",
+      "source_file": "models/usw-flex-mini.json",
+      "port_count": 5,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Pro-HD-24",
+      "display_name": "Pro HD 24",
+      "device_type": "switch",
+      "source_file": "models/usw-pro-hd-24.json",
+      "port_count": 28,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Pro-Max-16-PoE",
+      "display_name": "Pro Max 16 PoE",
+      "device_type": "switch",
+      "source_file": "models/usw-pro-max-16-poe.json",
+      "port_count": 18,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    }
+  ]
+}

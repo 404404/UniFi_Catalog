@@ -1,0 +1,16 @@
+{
+  "id": "official-us-xg-6poe-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "US-XG-6POE",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/switching/us-xg-6poe",
+      "publisher": "Ubiquiti",
+      "title": "UniFi XG 6 PoE (Gen1) - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official four 10 GbE RJ45 PoE++ ports, two 10G SFP+ ports and 170 W total available PoE."
+    }
+  ],
+  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "notes": "The source presents the official SKU as US-XG-6POE and labels the product XG 6 PoE (Gen1)."
+}

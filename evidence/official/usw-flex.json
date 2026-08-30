@@ -1,0 +1,16 @@
+{
+  "id": "official-usw-flex-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "USW-Flex",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/switching/usw-flex",
+      "publisher": "Ubiquiti",
+      "title": "UniFi Flex - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official five-port 1 GbE layout, PoE input/output classes and power consumption."
+    }
+  ],
+  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "notes": "The source describes the upstream PoE++ input and four PoE+ output ports; storage and physical fan capability are not established."
+}

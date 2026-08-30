@@ -1,0 +1,16 @@
+{
+  "id": "official-usw-pro-hd-24-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "USW-Pro-HD-24",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/switching/usw-pro-hd-24",
+      "publisher": "Ubiquiti",
+      "title": "UniFi Pro HD 24 - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official twenty-two 2.5 GbE RJ45 ports, two 10 GbE RJ45 ports, four 10G SFP+ ports and 60 W internal AC power."
+    }
+  ],
+  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe_in", "ports.poe_out", "power"],
+  "notes": "The source lists USP RPS DC backup in addition to an internal AC/DC supply; storage and physical fan capability are not established."
+}

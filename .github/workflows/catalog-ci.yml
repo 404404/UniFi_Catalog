@@ -1,0 +1,40 @@
+name: catalog-ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate JSON schemas and catalog
+        run: python3 tools/validate_catalog.py --check-generated
+
+      - name: Run tests
+        run: python3 -m unittest discover -s tests -v
+
+      - name: Secret scan for structured data
+        run: |
+          if rg -n -i --glob '*.json' '(-----BEGIN [A-Z ]*PRIVATE KEY-----|authorization[[:space:]]*[:=]|(api[_-]?key|access[_-]?token|session[_-]?cookie|password)[[:space:]]*[:=]|([0-9a-f]{2}:){5}[0-9a-f]{2})' models evidence fixtures; then
+            echo 'secret-like content found'
+            exit 1
+          fi
+
+      - name: Build deterministic bundles twice
+        run: |
+          python3 tools/build_catalog.py --check --output-dir "$RUNNER_TEMP/catalog-one"
+          python3 tools/build_catalog.py --check --output-dir "$RUNNER_TEMP/catalog-two"
+          cmp "$RUNNER_TEMP/catalog-one/catalog.json" "$RUNNER_TEMP/catalog-two/catalog.json"
+          cmp "$RUNNER_TEMP/catalog-one/catalog.sha256" "$RUNNER_TEMP/catalog-two/catalog.sha256"
+
+      - name: Confirm source tree is clean
+        run: git diff --exit-code && test -z "$(git status --porcelain)"

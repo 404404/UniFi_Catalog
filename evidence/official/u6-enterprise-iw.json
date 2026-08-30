@@ -1,0 +1,16 @@
+{
+  "id": "official-u6-enterprise-iw-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "U6-Enterprise-IW",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/wifi/u6-enterprise-iw",
+      "publisher": "Ubiquiti",
+      "title": "UniFi U6 Enterprise In-Wall - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official data-in 1/2.5 GbE port, four data-out GbE ports, one PoE output and 21 W maximum power consumption."
+    }
+  ],
+  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "notes": "The source identifies one PoE output but does not identify its face position by port index, so output mapping is kept incomplete."
+}

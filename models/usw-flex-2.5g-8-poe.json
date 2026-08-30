@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "canonical_sku": "USW-Flex-2.5G-8-PoE",
+  "display_name": "Flex 2.5G PoE",
+  "device_type": "switch",
+  "official_evidence_ids": ["official-usw-flex-2-5g-8-poe-techspecs-20260830"],
+  "runtime_identifiers": {"api_model": [], "sysid": [], "ssh_model": []},
+  "ports": {"complete": true, "items": [
+    {"index": 1, "label": "RJ45-1", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 64, "combo_group": null},
+    {"index": 2, "label": "RJ45-2", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 64, "combo_group": null},
+    {"index": 3, "label": "RJ45-3", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 64, "combo_group": null},
+    {"index": 4, "label": "RJ45-4", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 64, "combo_group": null},
+    {"index": 5, "label": "RJ45-5", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 64, "combo_group": null},
+    {"index": 6, "label": "RJ45-6", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 64, "combo_group": null},
+    {"index": 7, "label": "RJ45-7", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 64, "combo_group": null},
+    {"index": 8, "label": "RJ45-8", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": true, "poe_standard": "poe++", "poe_max_power_w": 64, "combo_group": null},
+    {"index": 9, "label": "RJ45-9 PoE+++ input", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 10000, "poe_in": true, "poe_out": false, "poe_standard": "poe+++", "poe_max_power_w": null, "combo_group": null},
+    {"index": 10, "label": "SFP+-1", "connector": "sfp_plus", "roles": ["lan"], "max_speed_mbps": 10000, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null}
+  ]},
+  "storage": {"complete": false, "items": []},
+  "power": {"source_type": "external_adapter_or_poe", "psu_slots": null, "max_power_w": 210, "poe_budget_w": 196},
+  "fans": {"status": "unknown", "count": null}
+}

@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/404404/UniFi_Catalog/schema/model.schema.json",
+  "title": "UniFi Catalog model v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "canonical_sku",
+    "display_name",
+    "device_type",
+    "official_evidence_ids",
+    "runtime_identifiers",
+    "ports",
+    "storage",
+    "power",
+    "fans"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "canonical_sku": {"type": "string", "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"},
+    "display_name": {"type": "string", "minLength": 1},
+    "processor": {"type": "object", "additionalProperties": false, "required": ["model", "architecture", "cores", "clock_mhz"], "properties": {"model": {"type": ["string", "null"]}, "architecture": {"type": "string", "minLength": 1}, "cores": {"type": ["integer", "null"], "minimum": 1}, "clock_mhz": {"type": ["integer", "null"], "minimum": 1}}},
+    "device_type": {"enum": ["gateway", "switch", "ap"]},
+    "official_evidence_ids": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^official-[a-z0-9-]+$"},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "runtime_identifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_model", "sysid", "ssh_model"],
+      "properties": {
+        "api_model": {"$ref": "#/$defs/runtime_aliases"},
+        "sysid": {"$ref": "#/$defs/runtime_aliases"},
+        "ssh_model": {"$ref": "#/$defs/runtime_aliases"}
+      }
+    },
+    "ports": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complete", "items"],
+      "properties": {
+        "complete": {"type": "boolean"},
+        "items": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/port"}
+        }
+      }
+    },
+    "storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complete", "items"],
+      "properties": {
+        "complete": {"type": "boolean"},
+        "items": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/storage_item"}
+        }
+      }
+    },
+    "power": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_type", "psu_slots", "max_power_w"],
+      "properties": {
+        "source_type": {
+          "enum": [
+            "integrated_ac",
+            "integrated_ac_with_dc_backup",
+            "external_adapter",
+            "external_adapter_or_poe",
+            "poe_powered",
+            "dc_or_external_adapter",
+            "unknown"
+          ]
+        },
+        "psu_slots": {"type": ["integer", "null"], "minimum": 0},
+        "max_power_w": {"type": ["number", "null"], "minimum": 0},
+        "poe_budget_w": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
+    "fans": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "count"],
+      "properties": {
+        "status": {"enum": ["present", "absent", "unknown"]},
+        "count": {"type": ["integer", "null"], "minimum": 0}
+      }
+    }
+  },
+  "$defs": {
+    "runtime_aliases": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/runtime_alias"},
+      "uniqueItems": true
+    },
+    "runtime_alias": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "status", "provenance", "evidence_id"],
+      "properties": {
+        "value": {"type": "string", "minLength": 1},
+        "status": {"enum": ["candidate", "verified"]},
+        "provenance": {"type": "string", "minLength": 1},
+        "evidence_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "port": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "label",
+        "connector",
+        "roles",
+        "max_speed_mbps",
+        "poe_in",
+        "poe_out",
+        "poe_standard",
+        "poe_max_power_w",
+        "combo_group"
+      ],
+      "properties": {
+        "index": {"type": "integer", "minimum": 1},
+        "label": {"type": "string", "minLength": 1},
+        "connector": {"enum": ["rj45", "sfp", "sfp_plus", "sfp28", "other"]},
+        "roles": {
+          "type": "array",
+          "items": {"enum": ["lan", "wan"]},
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "max_speed_mbps": {
+          "type": ["integer", "null"],
+          "enum": [10, 100, 1000, 2500, 5000, 10000, 25000, 100000, null]
+        },
+        "poe_in": {"type": ["boolean", "null"]},
+        "poe_out": {"type": ["boolean", "null"]},
+        "poe_standard": {
+          "type": ["string", "null"],
+          "enum": ["poe", "poe+", "poe++", "poe+++", null]
+        },
+        "poe_max_power_w": {"type": ["number", "null"], "minimum": 0},
+        "combo_group": {"type": ["string", "null"]}
+      }
+    },
+    "storage_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "kind", "default_presence", "capacity_bytes", "max_capacity_bytes"],
+      "properties": {
+        "type": {"enum": ["emmc", "ssd", "sata_ssd", "nvme", "microsd", "tf", "other"]},
+        "kind": {"enum": ["fixed_device", "user_slot", "removable_media"]},
+        "default_presence": {"enum": ["present", "not_populated", "unknown"]},
+        "capacity_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "max_capacity_bytes": {"type": ["integer", "null"], "minimum": 0}
+      }
+    }
+  }
+}

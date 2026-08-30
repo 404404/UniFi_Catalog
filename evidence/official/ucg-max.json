@@ -1,0 +1,16 @@
+{
+  "id": "official-ucg-max-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "UCG-Max",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/cloud-gateways/ucg-max",
+      "publisher": "Ubiquiti",
+      "title": "UniFi Cloud Gateway Max - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official identity, five 2.5 GbE ports, selectable NVMe capacity and maximum power consumption. The page does not establish a physical fan count."
+    }
+  ],
+  "fields_supported": ["canonical_sku", "display_name", "processor", "ports.topology", "ports.max_speed_mbps", "storage", "power"],
+  "notes": "Selectable NVMe is represented as a user slot with a 2 TB maximum and no default installed capacity."
+}

@@ -1,0 +1,16 @@
+{
+  "id": "official-usw-flex-2-5g-5-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "USW-Flex-2.5G-5",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/switching/usw-flex-2-5g-5",
+      "publisher": "Ubiquiti",
+      "title": "UniFi Flex Mini 2.5G - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official five-port 2.5 GbE layout, USB-C/PoE input methods and maximum power consumption."
+    }
+  ],
+  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe_in", "power"],
+  "notes": "The product display name is Flex Mini 2.5G; the canonical SKU is USW-Flex-2.5G-5."
+}

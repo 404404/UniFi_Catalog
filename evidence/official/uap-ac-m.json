@@ -1,0 +1,16 @@
+{
+  "id": "official-uap-ac-m-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "UAP-AC-M",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/wifi/uap-ac-m",
+      "publisher": "Ubiquiti",
+      "title": "UniFi AC Mesh - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official single GbE RJ45 networking interface and PoE power method."
+    }
+  ],
+  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe_in", "power"],
+  "notes": "The source does not establish storage or physical fan capability."
+}

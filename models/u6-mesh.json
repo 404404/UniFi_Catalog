@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "canonical_sku": "U6-Mesh",
+  "display_name": "U6 Mesh",
+  "device_type": "ap",
+  "official_evidence_ids": ["official-u6-mesh-techspecs-20260830"],
+  "runtime_identifiers": {"api_model": [], "sysid": [], "ssh_model": []},
+  "ports": {"complete": true, "items": [
+    {"index": 1, "label": "GbE uplink", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": true, "poe_out": false, "poe_standard": "poe", "poe_max_power_w": null, "combo_group": null}
+  ]},
+  "storage": {"complete": false, "items": []},
+  "power": {"source_type": "poe_powered", "psu_slots": null, "max_power_w": 13, "poe_budget_w": null},
+  "fans": {"status": "unknown", "count": null}
+}

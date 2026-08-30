@@ -1,0 +1,16 @@
+{
+  "id": "official-usw-flex-2-5g-8-poe-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "USW-Flex-2.5G-8-PoE",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/switching/usw-flex-2-5g-8-poe",
+      "publisher": "Ubiquiti",
+      "title": "UniFi Flex 2.5G PoE - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official eight 2.5 GbE PoE++ ports, one 10 GbE RJ45 PoE+++ input, one 10G SFP+ port and power budget."
+    }
+  ],
+  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "notes": "The 10 GbE RJ45 is modeled as the PoE+++ input; the eight 2.5 GbE RJ45 ports are PoE++ output ports."
+}

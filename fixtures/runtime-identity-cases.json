@@ -1,0 +1,14 @@
+{
+  "qualified_evidence": {
+    "id": "runtime-fixture-qualified",
+    "kind": "qualified_controller",
+    "supports": {"api_model": "Fixture API", "sysid": "fixture-sysid"},
+    "observed_on": "2026-08-30",
+    "source_note": "Synthetic CI fixture; not a real device observation."
+  },
+  "aliases": {
+    "verified_sysid": "fixture-sysid",
+    "verified_api_model": "Fixture API",
+    "candidate_ssh_model": "Fixture SSH Candidate"
+  }
+}

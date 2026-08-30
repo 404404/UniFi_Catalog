@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "processor": {"model": null, "architecture": "ARM Cortex-A53", "cores": 4, "clock_mhz": 1500},
+  "canonical_sku": "UCG-Max",
+  "display_name": "Cloud Gateway Max",
+  "device_type": "gateway",
+  "official_evidence_ids": ["official-ucg-max-techspecs-20260830"],
+  "runtime_identifiers": {"api_model": [], "sysid": [], "ssh_model": []},
+  "ports": {"complete": true, "items": [
+    {"index": 1, "label": "RJ45-1", "connector": "rj45", "roles": ["lan", "wan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+    {"index": 2, "label": "RJ45-2", "connector": "rj45", "roles": ["lan", "wan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+    {"index": 3, "label": "RJ45-3", "connector": "rj45", "roles": ["lan", "wan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+    {"index": 4, "label": "RJ45-4", "connector": "rj45", "roles": ["lan", "wan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
+    {"index": 5, "label": "RJ45-5", "connector": "rj45", "roles": ["lan", "wan"], "max_speed_mbps": 2500, "poe_in": false, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null}
+  ]},
+  "storage": {"complete": true, "items": [{"type": "nvme", "kind": "user_slot", "default_presence": "not_populated", "capacity_bytes": null, "max_capacity_bytes": 2000000000000}]},
+  "power": {"source_type": "external_adapter", "psu_slots": null, "max_power_w": 16.1, "poe_budget_w": null},
+  "fans": {"status": "unknown", "count": null}
+}
