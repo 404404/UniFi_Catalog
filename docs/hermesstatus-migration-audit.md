@@ -14,9 +14,9 @@ catalog unchanged.
 
 | Source repository | Source revision | Source file | Source field | Migration class | Evidence status | Decision |
 |---|---|---|---|---|---|---|
-| 404404/HermesStatus | `9ea7819c45bfa5e7f87f3de00dfe498c20e25c82` | `clients/unifi_profiles/udw.json` | `cpu_model` | fixed processor identity | legacy value is not independently authoritative | REVIEW; catalog records only the official Cortex-A57/4-core/1.7 GHz description |
+| 404404/HermesStatus | `9ea7819c45bfa5e7f87f3de00dfe498c20e25c82` | `clients/unifi_profiles/udw.json` | `cpu_model` | fixed processor identity | qualified device-local/log evidence is explicitly bound to UDW and verified | MIGRATE as processor.model=Annapurna AL324; architecture/core/clock remain independently qualified official facts |
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `power.psu_slots` | physical power capability | corroborated by official Tech Specs | MIGRATE as `power.psu_slots=2` |
-| 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `power.max_power_w` | static power limit | ambiguous: legacy 550 W is the PSU rating, not the official 532 W max device consumption | REVIEW; catalog uses the official 532 W value |
+| 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `power.max_power_w` | ambiguous combined power value | legacy value is a PSU/controller reference, not device consumption | SPLIT legacy meaning; catalog records psu_unit_capacity_w=550, controller_reference_capacity_w=550, max_device_consumption_w=532 |
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `power.presence` | runtime presence | dynamic | KEEP in HermesStatus |
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `power.sensor_mapping` | diagnostic collection semantics | not a hardware fact | KEEP in HermesStatus |
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `storage.sata_ssd.supported` | fixed storage capability | corroborated by official integrated 128 GB SSD | MIGRATE as a fixed `ssd` item |
@@ -30,7 +30,7 @@ catalog unchanged.
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `poe.supported` | fixed PoE capability | corroborated by official port layout | MIGRATE structurally into the physical port table; no redundant boolean |
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `poe.total_max_power_w` | fixed PoE budget | corroborated by official 420 W PoE budget | MIGRATE as `power.absolute_max_poe_budget_w=420` and a qualified profile budget |
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `poe.port_max_power_w` | per-port static PoE capability | legacy values conflict with the official page's class grouping/order and lack a source note | REVIEW; catalog uses independently verified class grouping only |
-| 404404/HermesStatus | same | `clients/unifi_profiles/ucg-max.json` | `cpu_model` | fixed processor identity | legacy/community-level value; official page gives only Cortex-A53/4-core/1.5 GHz | REVIEW; exact Qualcomm model is not authoritative in this revision |
+| 404404/HermesStatus | same | `clients/unifi_profiles/ucg-max.json` | `cpu_model` | fixed processor identity | qualified device-local/log evidence is explicitly bound to UCG-Max and verified | MIGRATE as processor.model=Qualcomm IPQ5322; architecture/core/clock remain independently qualified official facts |
 | 404404/HermesStatus | same | `clients/unifi_profiles/ucg-max.json` | `power.psu_slots` | physical power capability | `0` conflates no internal PSU with external adapter | MIGRATE normalized as external adapter with `psu_slots=null` |
 | 404404/HermesStatus | same | `clients/unifi_profiles/ucg-max.json` | `power.presence` | runtime presence | dynamic/unknown | KEEP in HermesStatus |
 | 404404/HermesStatus | same | `clients/unifi_profiles/ucg-max.json` | `power.sensor_mapping` | diagnostic collection semantics | not a hardware fact | KEEP in HermesStatus |
@@ -77,7 +77,7 @@ HermesStatus, the following legacy fields may be removed or made derived:
 
 | HermesStatus profile area | Future catalog source | Qualification prerequisite |
 |---|---|---|
-| `cpu_model` and other fixed processor facts | model `processor` | official source coverage for exact chip identity, if exact identity is needed |
+| `cpu_model` and other fixed processor facts | model `processor` | qualified static evidence or official source coverage for exact chip identity, if exact identity is needed |
 | `power.psu_slots`, static max power and PoE profile budgets | model `power` and `power_profiles` | catalog revision and bundle hash pinned at image build |
 | `poe` boolean and per-port power map | model `ports` and derived PoE classification | exact port index/class mapping qualified per model |
 | fixed storage capability/capacity | model `storage` | catalog storage completeness semantics consumed by the profile loader |

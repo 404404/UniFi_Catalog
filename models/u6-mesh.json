@@ -37,7 +37,9 @@
   "power": {
     "source_type": "poe_powered",
     "psu_slots": null,
-    "max_power_w": 13,
+    "psu_unit_capacity_w": null,
+    "controller_reference_capacity_w": null,
+    "max_device_consumption_w": 13,
     "absolute_max_poe_budget_w": 0,
     "power_profiles": [
       {

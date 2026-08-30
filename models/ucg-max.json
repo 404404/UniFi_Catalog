@@ -1,10 +1,13 @@
 {
   "schema_version": 1,
   "processor": {
-    "model": null,
+    "model": "Qualcomm IPQ5322",
     "architecture": "ARM Cortex-A53",
     "cores": 4,
-    "clock_mhz": 1500
+    "clock_mhz": 1500,
+    "model_evidence_ids": [
+      "runtime-static-ucg-max-processor-model-20260830"
+    ]
   },
   "canonical_sku": "UCG-Max",
   "display_name": "Cloud Gateway Max",
@@ -112,7 +115,9 @@
   "power": {
     "source_type": "external_adapter",
     "psu_slots": null,
-    "max_power_w": 16.1,
+    "psu_unit_capacity_w": null,
+    "controller_reference_capacity_w": null,
+    "max_device_consumption_w": 16.1,
     "absolute_max_poe_budget_w": 0,
     "power_profiles": [
       {

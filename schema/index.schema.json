@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/404404/UniFi_Catalog/schema/index.schema.json",
+  "title": "UniFi Catalog generated index v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "model_count", "models"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "model_count": {"type": "integer", "minimum": 0},
+    "models": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["canonical_sku", "display_name", "device_type", "source_file", "port_count", "ports_complete", "storage_complete", "fan_status", "absolute_max_poe_budget_w", "power_profile_count", "verified_power_profile_ids", "verified_runtime_identifiers"],
+        "properties": {
+          "canonical_sku": {"type": "string", "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"},
+          "display_name": {"type": "string", "minLength": 1},
+          "device_type": {"enum": ["gateway", "switch", "ap"]},
+          "source_file": {"type": "string", "pattern": "^models/[a-z0-9][a-z0-9.-]*\\.json$"},
+          "port_count": {"type": "integer", "minimum": 0},
+          "ports_complete": {"type": "boolean"},
+          "storage_complete": {"type": "boolean"},
+          "fan_status": {"enum": ["present", "absent", "unknown"]},
+          "absolute_max_poe_budget_w": {"type": ["number", "null"], "minimum": 0},
+          "power_profile_count": {"type": "integer", "minimum": 1},
+          "verified_power_profile_ids": {"type": "array", "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}, "uniqueItems": true},
+          "verified_runtime_identifiers": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["api_model", "sysid", "ssh_model"],
+            "properties": {
+              "api_model": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+              "sysid": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+              "ssh_model": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+            }
+          }
+        }
+      }
+    }
+  }
+}

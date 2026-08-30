@@ -7,6 +7,7 @@ import argparse
 from pathlib import Path
 
 from catalog import CatalogError, build_index, canonical_json, catalog_sha256, normalized_catalog, validate_catalog
+from schema_validate import SchemaValidationError, validate_json_file
 
 
 def main() -> int:
@@ -27,9 +28,18 @@ def main() -> int:
         else:
             index_path.parent.mkdir(parents=True, exist_ok=True)
             index_path.write_bytes(index_bytes)
+        try:
+            validate_json_file(root, index_path, "index.schema.json")
+        except SchemaValidationError as exc:
+            raise CatalogError(f"generated index schema validation failed: {exc}") from exc
         catalog_bytes = canonical_json(normalized_catalog(models))
         output_dir.mkdir(parents=True, exist_ok=True)
-        (output_dir / "catalog.json").write_bytes(catalog_bytes)
+        catalog_path = output_dir / "catalog.json"
+        catalog_path.write_bytes(catalog_bytes)
+        try:
+            validate_json_file(root, catalog_path, "catalog.schema.json")
+        except SchemaValidationError as exc:
+            raise CatalogError(f"bundle schema validation failed: {exc}") from exc
         digest = catalog_sha256(catalog_bytes)
         (output_dir / "catalog.sha256").write_text(digest + "  catalog.json\n", encoding="utf-8")
         manifest = {"catalog_schema_version": 1, "model_count": len(models), "bundle_sha256": digest}

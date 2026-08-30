@@ -107,7 +107,9 @@
   "power": {
     "source_type": "dc_or_external_adapter",
     "psu_slots": null,
-    "max_power_w": 40,
+    "psu_unit_capacity_w": null,
+    "controller_reference_capacity_w": null,
+    "max_device_consumption_w": 40,
     "absolute_max_poe_budget_w": 170,
     "power_profiles": [
       {

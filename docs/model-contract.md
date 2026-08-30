@@ -5,6 +5,7 @@ canonical SKU is stable identity; the display name is descriptive only.
 
 The contract separates:
 
+* qualified device-local static facts: an explicitly bound model field may be established by sanitized qualified_runtime_static evidence;
 * official static hardware facts: processor description when officially
   documented, physical Ethernet ports, static maximum speed, PoE direction and
   limits, storage capability and power capability;
@@ -18,7 +19,7 @@ incomplete; it does not mean the hardware capability is absent.
 
 ## Power profiles
 
-`power.max_power_w` is the model/device maximum consumption and is separate
+`power.max_device_consumption_w` is the model/device maximum consumption and is separate
 from per-profile `input_capacity_w`. Each `power_profiles[]` item records one
 physical input option or selected source profile:
 

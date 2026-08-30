@@ -16,18 +16,17 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Validate JSON schemas and catalog
+      - name: Install validation dependencies
+        run: python3 -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Validate Draft 2020-12 schemas and catalog
         run: python3 tools/validate_catalog.py --check-generated
 
       - name: Run tests
         run: python3 -m unittest discover -s tests -v
 
-      - name: Secret scan for structured data
-        run: |
-          if rg -n -i --glob '*.json' '(-----BEGIN [A-Z ]*PRIVATE KEY-----|authorization[[:space:]]*[:=]|(api[_-]?key|access[_-]?token|session[_-]?cookie|password)[[:space:]]*[:=]|([0-9a-f]{2}:){5}[0-9a-f]{2})' models evidence fixtures; then
-            echo 'secret-like content found'
-            exit 1
-          fi
+      - name: Secret scan for catalog-controlled data
+        run: python3 tools/secret_scan.py models evidence fixtures
 
       - name: Build deterministic bundles twice
         run: |
@@ -35,6 +34,25 @@ jobs:
           python3 tools/build_catalog.py --check --output-dir "$RUNNER_TEMP/catalog-two"
           cmp "$RUNNER_TEMP/catalog-one/catalog.json" "$RUNNER_TEMP/catalog-two/catalog.json"
           cmp "$RUNNER_TEMP/catalog-one/catalog.sha256" "$RUNNER_TEMP/catalog-two/catalog.sha256"
+
+      - name: Upload deterministic catalog bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: unifi-catalog-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/catalog-one/catalog.json
+            ${{ runner.temp }}/catalog-one/catalog.sha256
+          if-no-files-found: error
+
+      - name: Publish bundle SHA in job summary
+        run: |
+          sha=$(awk '{print $1}' "$RUNNER_TEMP/catalog-one/catalog.sha256")
+          {
+            echo "## UniFi Catalog bundle"
+            echo
+            echo "- Commit: \`${GITHUB_SHA}\`"
+            echo "- SHA256: \`${sha}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Confirm source tree is clean
         run: git diff --exit-code && test -z "$(git status --porcelain)"

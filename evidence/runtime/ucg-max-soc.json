@@ -1,0 +1,11 @@
+{
+  "id": "runtime-static-ucg-max-processor-model-20260830",
+  "kind": "qualified_runtime_static",
+  "canonical_sku": "UCG-Max",
+  "field_path": "processor.model",
+  "observed_value": "Qualcomm IPQ5322",
+  "source_class": "device_local_log",
+  "qualification_state": "verified",
+  "observed_on": "2026-08-30",
+  "source_note": "Sanitized qualified device-local/log evidence; raw logs are intentionally omitted."
+}

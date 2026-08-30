@@ -1,10 +1,13 @@
 {
   "schema_version": 1,
   "processor": {
-    "model": null,
+    "model": "Annapurna AL324",
     "architecture": "ARM Cortex-A57",
     "cores": 4,
-    "clock_mhz": 1700
+    "clock_mhz": 1700,
+    "model_evidence_ids": [
+      "runtime-static-udw-processor-model-20260830"
+    ]
   },
   "canonical_sku": "UDW",
   "display_name": "Dream Wall",
@@ -334,7 +337,9 @@
   "power": {
     "source_type": "integrated_ac",
     "psu_slots": 2,
-    "max_power_w": 532,
+    "psu_unit_capacity_w": 550,
+    "controller_reference_capacity_w": 550,
+    "max_device_consumption_w": 532,
     "absolute_max_poe_budget_w": 420,
     "power_profiles": [
       {

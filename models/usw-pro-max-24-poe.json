@@ -387,7 +387,9 @@
   "power": {
     "source_type": "integrated_ac_with_dc_backup",
     "psu_slots": 1,
-    "max_power_w": 450,
+    "psu_unit_capacity_w": null,
+    "controller_reference_capacity_w": null,
+    "max_device_consumption_w": 450,
     "absolute_max_poe_budget_w": 400,
     "power_profiles": [
       {

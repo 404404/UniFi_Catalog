@@ -8,6 +8,9 @@
     },
     {
       "$ref": "#/$defs/runtime_observation"
+    },
+    {
+      "$ref": "#/$defs/qualified_runtime_static"
     }
   ],
   "$defs": {
@@ -91,6 +94,7 @@
       "required": [
         "id",
         "kind",
+        "canonical_sku",
         "supports",
         "observed_on"
       ],
@@ -130,6 +134,61 @@
         },
         "source_note": {
           "type": "string"
+        },
+        "canonical_sku": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"
+        }
+      }
+    },
+    "qualified_runtime_static": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "canonical_sku",
+        "field_path",
+        "observed_value",
+        "source_class",
+        "qualification_state",
+        "observed_on"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^runtime-[a-z0-9-]+$"
+        },
+        "kind": {
+          "const": "qualified_runtime_static"
+        },
+        "canonical_sku": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"
+        },
+        "field_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "observed_value": {},
+        "source_class": {
+          "enum": [
+            "device_local_log"
+          ]
+        },
+        "qualification_state": {
+          "enum": [
+            "candidate",
+            "verified"
+          ]
+        },
+        "observed_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "source_note": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }

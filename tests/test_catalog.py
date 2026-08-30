@@ -3,6 +3,8 @@ from __future__ import annotations
 import copy
 import json
 import shutil
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -28,6 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class CatalogTests(unittest.TestCase):
     def setUp(self):
         self.models, self.official, self.runtime = validate_catalog(ROOT)
+        self.runtime.update(self.fixture_runtime())
 
     def model(self, filename: str) -> dict:
         return copy.deepcopy(next(model for model in self.models if model["canonical_sku"].lower() + ".json" == filename))
@@ -37,12 +40,12 @@ class CatalogTests(unittest.TestCase):
         evidence = fixture["qualified_evidence"]
         return {evidence["id"]: evidence}
 
-    def add_alias(self, model: dict, identifier_type: str, value: str, status: str = "verified") -> None:
+    def add_alias(self, model: dict, identifier_type: str, value: str, status: str = "verified", evidence_id: str = "runtime-fixture-qualified") -> None:
         model["runtime_identifiers"][identifier_type].append({
             "value": value,
             "status": status,
             "provenance": "synthetic_fixture",
-            "evidence_id": "runtime-fixture-qualified",
+            "evidence_id": evidence_id,
         })
 
     def test_catalog_has_twenty_canonical_models(self):
@@ -77,12 +80,16 @@ class CatalogTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             temporary_root = Path(temporary) / "catalog"
             shutil.copytree(ROOT, temporary_root)
-            runtime_path = temporary_root / "evidence" / "runtime" / "fixture.json"
-            runtime_path.write_text(json.dumps(next(iter(self.fixture_runtime().values())), indent=2) + "\n", encoding="utf-8")
-            for filename in ("ucg-max.json", "udw.json"):
+            for filename, sku in (("ucg-max.json", "UCG-Max"), ("udw.json", "UDW")):
+                evidence = next(iter(self.fixture_runtime().values())).copy()
+                evidence["id"] = "runtime-fixture-" + sku.lower()
+                evidence["canonical_sku"] = sku
+                evidence["supports"] = {"sysid": "same-verified-sysid"}
+                runtime_path = temporary_root / "evidence" / "runtime" / (evidence["id"] + ".json")
+                runtime_path.write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
                 path = temporary_root / "models" / filename
                 model = json.loads(path.read_text(encoding="utf-8"))
-                self.add_alias(model, "sysid", "same-verified-sysid")
+                self.add_alias(model, "sysid", "same-verified-sysid", evidence_id=evidence["id"])
                 path.write_text(json.dumps(model, indent=2) + "\n", encoding="utf-8")
             with self.assertRaisesRegex(CatalogError, "duplicate verified runtime alias"):
                 validate_catalog(temporary_root)
@@ -211,6 +218,98 @@ class CatalogTests(unittest.TestCase):
         self.add_alias(standard, "sysid", "sibling-specific-sysid")
         self.assertIs(resolve_model([standard, poe], "sibling-specific-sysid", identifier_type="sysid"), standard)
         self.assertIsNone(resolve_model([poe], "sibling-specific-sysid", identifier_type="sysid"))
+
+    def test_udw_and_ucg_static_soc_evidence_is_bound(self):
+        for filename, evidence_id, soc in (
+            ("udw.json", "runtime-static-udw-processor-model-20260830", "Annapurna AL324"),
+            ("ucg-max.json", "runtime-static-ucg-max-processor-model-20260830", "Qualcomm IPQ5322"),
+        ):
+            model = self.model(filename)
+            evidence = self.runtime[evidence_id]
+            self.assertEqual(model["processor"]["model"], soc)
+            self.assertEqual(evidence["canonical_sku"], model["canonical_sku"])
+            self.assertEqual(evidence["field_path"], "processor.model")
+            self.assertEqual(evidence["observed_value"], soc)
+            self.assertEqual(evidence["qualification_state"], "verified")
+            self.assertNotIn("supports", evidence)
+
+    def test_udw_power_quantities_remain_distinct(self):
+        power = self.model("udw.json")["power"]
+        self.assertEqual(power["psu_slots"], 2)
+        self.assertEqual(power["psu_unit_capacity_w"], 550)
+        self.assertEqual(power["controller_reference_capacity_w"], 550)
+        self.assertEqual(power["max_device_consumption_w"], 532)
+        self.assertEqual(power["absolute_max_poe_budget_w"], 420)
+        self.assertNotIn("max_power_w", power)
+
+    def test_cross_sku_runtime_evidence_fails(self):
+        model = self.model("udw.json")
+        self.add_alias(model, "sysid", "fixture-sysid")
+        with self.assertRaisesRegex(CatalogError, "runtime evidence SKU mismatch"):
+            validate_model(model, self.official, self.runtime)
+
+    def test_runtime_alias_value_must_match_evidence(self):
+        model = self.model("ucg-max.json")
+        self.add_alias(model, "sysid", "wrong-value")
+        with self.assertRaisesRegex(CatalogError, "alias value does not match"):
+            validate_model(model, self.official, self.runtime)
+
+    def test_static_evidence_cannot_back_runtime_alias(self):
+        model = self.model("ucg-max.json")
+        self.add_alias(model, "sysid", "Qualcomm IPQ5322", evidence_id="runtime-static-ucg-max-processor-model-20260830")
+        with self.assertRaisesRegex(CatalogError, "aliases require qualified controller/SSH identity evidence"):
+            validate_model(model, self.official, self.runtime)
+
+    def test_runtime_alias_source_and_identifier_type_must_match(self):
+        model = self.model("ucg-max.json")
+        self.add_alias(model, "ssh_model", "Fixture API")
+        with self.assertRaisesRegex(CatalogError, "controller evidence cannot prove ssh_model"):
+            validate_model(model, self.official, self.runtime)
+
+    def test_missing_runtime_evidence_fails(self):
+        model = self.model("ucg-max.json")
+        self.add_alias(model, "sysid", "fixture-sysid", evidence_id="runtime-does-not-exist")
+        with self.assertRaisesRegex(CatalogError, "evidence reference does not exist"):
+            validate_model(model, self.official, self.runtime)
+
+    def test_schema_violation_does_not_reach_semantic_validation(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary_root = Path(temporary) / "catalog"
+            shutil.copytree(ROOT, temporary_root)
+            path = temporary_root / "models" / "ucg-max.json"
+            model = json.loads(path.read_text(encoding="utf-8"))
+            model["schema_only_extra"] = True
+            path.write_text(json.dumps(model, indent=2) + "\n", encoding="utf-8")
+            with self.assertRaisesRegex(CatalogError, "JSON Schema validation failed"):
+                validate_catalog(temporary_root)
+
+    def test_semantic_violation_is_checked_after_schema(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary_root = Path(temporary) / "catalog"
+            shutil.copytree(ROOT, temporary_root)
+            path = temporary_root / "models" / "ucg-max.json"
+            model = json.loads(path.read_text(encoding="utf-8"))
+            model["official_evidence_ids"] = ["official-udw-techspecs-20260830"]
+            path.write_text(json.dumps(model, indent=2) + "\n", encoding="utf-8")
+            with self.assertRaisesRegex(CatalogError, "official evidence SKU mismatch"):
+                validate_catalog(temporary_root)
+
+    def test_secret_scanner_failure_is_not_reported_as_pass(self):
+        result = subprocess.run(
+            [sys.executable, str(ROOT / "tools" / "secret_scan.py"), str(ROOT / "does-not-exist")],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("SECRET_SCAN=FAIL", result.stdout)
+        self.assertNotIn("SECRET_SCAN=PASS", result.stdout)
+
+    def test_local_validation_fails_closed_when_scanner_fails(self):
+        from unittest.mock import patch
+        with patch("tools.catalog.scan_paths", side_effect=RuntimeError("scanner unavailable")):
+            with self.assertRaisesRegex(CatalogError, "secret scanner failed closed"):
+                validate_catalog(ROOT)
 
     def test_deterministic_catalog_serialization(self):
         first = canonical_json(normalized_catalog(self.models))

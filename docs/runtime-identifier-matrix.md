@@ -1,6 +1,6 @@
 # Runtime identifier matrix
 
-No qualified runtime identifier is available for this V1 batch. `UNKNOWN` is intentional; no display name, filename, hostname or legacy profile ID has been promoted to an alias.
+No qualified runtime identifier alias is available for this V1 batch. The qualified device-local SoC evidence is static model evidence, not a resolver alias. `UNKNOWN` is intentional; no display name, filename, hostname or legacy profile ID has been promoted to an alias.
 
 | Product | Official SKU | API model | sysid | SSH Model | API == SKU? | SSH == SKU? | Qualification status | Evidence |
 |---|---|---|---|---|---|---|---|---|

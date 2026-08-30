@@ -9,7 +9,7 @@ V1 separates three facts that must not be collapsed into one power field:
 3. `selection_mode` says whether the source is fixed, auto-detected, or
    selected manually in the UniFi controller.
 
-`power.max_power_w` is maximum device consumption. A profile's
+`power.max_device_consumption_w` is maximum device consumption. A profile's
 `input_capacity_w` is the capacity of that source or adapter.
 `power.absolute_max_poe_budget_w` is the maximum PoE output capability under
 any supported source; `power_profiles[].poe_budget_w` is the usable budget for

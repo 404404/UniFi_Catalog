@@ -1,4 +1,4 @@
-"""Dependency-free catalog contracts, validation and deterministic serialization."""
+"""Catalog contracts, schema-backed validation and deterministic serialization."""
 
 from __future__ import annotations
 
@@ -8,6 +8,16 @@ import json
 import re
 from pathlib import Path
 from typing import Any
+
+try:
+    from .schema_validate import SchemaValidationError, validate_json_schemas
+except ImportError:
+    from schema_validate import SchemaValidationError, validate_json_schemas
+
+try:
+    from .secret_scan import SecretScanError, scan_paths
+except ImportError:
+    from secret_scan import SecretScanError, scan_paths
 
 
 class CatalogError(ValueError):
@@ -51,13 +61,9 @@ POWER_FIELD_STATUSES = {"verified", "candidate", "unknown", "not_applicable"}
 POWER_PROFILE_FIELDS = ("selection_mode", "input_method", "input_poe_class", "input_capacity_w", "poe_budget_w")
 FAN_STATUS = {"present", "absent", "unknown"}
 RUNTIME_KINDS = {"qualified_controller", "qualified_ssh"}
-SECRET_PATTERNS = (
-    re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
-    re.compile(r"(?i)authorization\s*[:=]"),
-    re.compile(r"(?i)(?:api[_-]?key|access[_-]?token|session[_-]?cookie|password)\s*[:=]"),
-    re.compile(r"(?i)\b(?:ssh_password|controller_token|private_key)\b"),
-    re.compile(r"(?i)\b(?:[0-9a-f]{2}:){5}[0-9a-f]{2}\b"),
-)
+STATIC_EVIDENCE_KINDS = {"qualified_runtime_static"}
+STATIC_FIELD_PATHS = {"processor.model"}
+CANONICAL_SKU_PATTERN = r"[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*"
 
 
 def canonical_filename(canonical_sku: str) -> str:
@@ -102,19 +108,42 @@ def validate_official_evidence(evidence: dict[str, Any]) -> None:
 
 
 def validate_runtime_evidence(evidence: dict[str, Any]) -> None:
-    _keys(evidence, {"id", "kind", "supports", "observed_on"}, {"source_note"}, "runtime evidence")
-    _require(isinstance(evidence["id"], str) and evidence["id"].startswith("runtime-"), "runtime evidence: invalid id")
-    _require(evidence["kind"] in RUNTIME_KINDS, "runtime evidence: invalid kind")
-    supports = _object(evidence["supports"], "runtime evidence.supports")
-    _require(set(supports) <= set(IDENTIFIER_TYPES) and supports, "runtime evidence.supports: invalid fields")
-    _require(all(isinstance(value, str) and value for value in supports.values()), "runtime evidence.supports: invalid value")
-    _require(isinstance(evidence["observed_on"], str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", evidence["observed_on"]), "runtime evidence: invalid date")
+    _require(isinstance(evidence.get("id"), str) and re.fullmatch(r"runtime-[a-z0-9-]+", evidence["id"]), "runtime evidence: invalid id")
+    kind = evidence.get("kind")
+    _require(kind in RUNTIME_KINDS | STATIC_EVIDENCE_KINDS, "runtime evidence: invalid kind")
+    _require(isinstance(evidence.get("canonical_sku"), str) and re.fullmatch(CANONICAL_SKU_PATTERN, evidence["canonical_sku"]), "runtime evidence: invalid canonical_sku")
+    _require(isinstance(evidence.get("observed_on"), str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", evidence["observed_on"]), "runtime evidence: invalid date")
+    if kind in RUNTIME_KINDS:
+        _keys(evidence, {"id", "kind", "canonical_sku", "supports", "observed_on"}, {"source_note"}, "runtime identity evidence")
+        supports = _object(evidence["supports"], "runtime evidence.supports")
+        _require(set(supports) <= set(IDENTIFIER_TYPES) and supports, "runtime evidence.supports: invalid fields")
+        allowed = {"api_model", "sysid"} if kind == "qualified_controller" else {"ssh_model"}
+        _require(set(supports) <= allowed, f"runtime evidence {kind}: unsupported identifier type")
+        _require(all(isinstance(value, str) and value for value in supports.values()), "runtime evidence.supports: invalid value")
+    else:
+        _keys(evidence, {"id", "kind", "canonical_sku", "field_path", "observed_value", "source_class", "qualification_state", "observed_on"}, {"source_note"}, "qualified static evidence")
+        _require(evidence["field_path"] in STATIC_FIELD_PATHS, f"qualified static evidence: field path is not allowed: {evidence['field_path']}")
+        _require(evidence["source_class"] == "device_local_log", "qualified static evidence: invalid source_class")
+        _require(evidence["qualification_state"] in {"candidate", "verified"}, "qualified static evidence: invalid qualification_state")
+        _require(evidence["observed_value"] is None or isinstance(evidence["observed_value"], (str, int, float, bool)), "qualified static evidence: observed_value must be scalar")
+    source_note = evidence.get("source_note")
+    _require(source_note is None or (isinstance(source_note, str) and source_note.strip()), "runtime evidence: invalid source_note")
 
 
-def _validate_processor(processor: Any) -> None:
+def _validate_processor(processor: Any, runtime_evidence: dict[str, dict[str, Any]], canonical_sku: str) -> None:
     processor = _object(processor, "processor")
-    _keys(processor, {"model", "architecture", "cores", "clock_mhz"}, set(), "processor")
-    _require(processor["model"] is None or isinstance(processor["model"], str), "processor.model: invalid value")
+    _keys(processor, {"model", "architecture", "cores", "clock_mhz", "model_evidence_ids"}, set(), "processor")
+    _require(isinstance(processor["model"], str) and processor["model"].strip(), "processor.model: qualified model string required")
+    evidence_ids = processor["model_evidence_ids"]
+    _require(isinstance(evidence_ids, list) and evidence_ids, "processor.model_evidence_ids: required")
+    for evidence_id in evidence_ids:
+        _require(evidence_id in runtime_evidence, f"processor.model_evidence_ids: unknown evidence reference: {evidence_id}")
+        evidence = runtime_evidence[evidence_id]
+        _require(evidence["kind"] in STATIC_EVIDENCE_KINDS, f"processor.model_evidence_ids: evidence is not qualified static evidence: {evidence_id}")
+        _require(evidence["canonical_sku"] == canonical_sku, f"processor.model_evidence_ids: SKU mismatch: {evidence_id}")
+        _require(evidence["field_path"] == "processor.model", f"processor.model_evidence_ids: wrong field path: {evidence_id}")
+        _require(evidence["observed_value"] == processor["model"], f"processor.model_evidence_ids: value mismatch: {evidence_id}")
+        _require(evidence["qualification_state"] == "verified", f"processor.model_evidence_ids: evidence is not verified: {evidence_id}")
     _require(isinstance(processor["architecture"], str) and processor["architecture"].strip(), "processor.architecture: invalid value")
     if processor["cores"] is not None:
         _require(isinstance(processor["cores"], int) and processor["cores"] > 0, "processor.cores: invalid value")
@@ -212,11 +241,13 @@ def _validate_power_field_evidence(value: Any, field_evidence: Any, name: str, e
 
 def _validate_power(power: Any, evidence: dict[str, dict[str, Any]], *, poe_output_state: str) -> None:
     power = _object(power, "power")
-    _keys(power, {"source_type", "psu_slots", "max_power_w", "absolute_max_poe_budget_w", "power_profiles"}, set(), "power")
+    _keys(power, {"source_type", "psu_slots", "psu_unit_capacity_w", "controller_reference_capacity_w", "max_device_consumption_w", "absolute_max_poe_budget_w", "power_profiles"}, set(), "power")
     _require(power["source_type"] in POWER_SOURCES, "power.source_type: invalid value")
     slots = power["psu_slots"]
     _require(slots is None or (isinstance(slots, int) and not isinstance(slots, bool) and slots >= 0), "power.psu_slots: invalid value")
-    _number(power["max_power_w"], "power.max_power_w")
+    _number(power["psu_unit_capacity_w"], "power.psu_unit_capacity_w")
+    _number(power["controller_reference_capacity_w"], "power.controller_reference_capacity_w")
+    _number(power["max_device_consumption_w"], "power.max_device_consumption_w")
     absolute = power["absolute_max_poe_budget_w"]
     _number(absolute, "power.absolute_max_poe_budget_w")
     profiles = power["power_profiles"]
@@ -287,7 +318,7 @@ def _validate_fans(fans: Any) -> None:
         _require(count is None, "unknown fans require count=null")
 
 
-def _validate_runtime_identifiers(value: Any, runtime_evidence: dict[str, dict[str, Any]]) -> list[tuple[str, str, str]]:
+def _validate_runtime_identifiers(value: Any, runtime_evidence: dict[str, dict[str, Any]], canonical_sku: str) -> list[tuple[str, str, str]]:
     identifiers = _object(value, "runtime_identifiers")
     _keys(identifiers, set(IDENTIFIER_TYPES), set(), "runtime_identifiers")
     seen: list[tuple[str, str, str]] = []
@@ -306,8 +337,14 @@ def _validate_runtime_identifiers(value: Any, runtime_evidence: dict[str, dict[s
             _require(isinstance(alias["provenance"], str) and alias["provenance"].strip(), f"{name}.provenance: invalid value")
             evidence_id = alias["evidence_id"]
             _require(evidence_id in runtime_evidence, f"{name}: evidence reference does not exist: {evidence_id}")
-            if alias["status"] == "verified":
-                _require(runtime_evidence[evidence_id]["kind"] in RUNTIME_KINDS, f"{name}: verified alias lacks qualified runtime evidence")
+            evidence = runtime_evidence[evidence_id]
+            _require(evidence["kind"] in RUNTIME_KINDS, f"{name}: aliases require qualified controller/SSH identity evidence")
+            _require(evidence["canonical_sku"] == canonical_sku, f"{name}: runtime evidence SKU mismatch")
+            if evidence["kind"] == "qualified_controller":
+                _require(identifier_type in {"api_model", "sysid"}, f"{name}: controller evidence cannot prove {identifier_type}")
+            else:
+                _require(identifier_type == "ssh_model", f"{name}: SSH evidence can only prove ssh_model")
+            _require(evidence["supports"].get(identifier_type) == alias["value"], f"{name}: alias value does not match evidence.supports.{identifier_type}")
             seen.append((identifier_type, alias["value"], evidence_id))
     return seen
 
@@ -322,13 +359,13 @@ def validate_model(model: dict[str, Any], official_evidence: dict[str, dict[str,
     _require(isinstance(model["display_name"], str) and model["display_name"].strip(), "model.display_name: invalid value")
     _require(model["device_type"] in {"gateway", "switch", "ap"}, "model.device_type: invalid value")
     if "processor" in model:
-        _validate_processor(model["processor"])
+        _validate_processor(model["processor"], runtime_evidence, sku)
     official_ids = model["official_evidence_ids"]
     _require(isinstance(official_ids, list) and official_ids, "model.official_evidence_ids: required")
     for evidence_id in official_ids:
         _require(evidence_id in official_evidence, f"model: official evidence reference does not exist: {evidence_id}")
         _require(official_evidence[evidence_id]["canonical_sku"] == sku, f"model: official evidence SKU mismatch: {evidence_id}")
-    runtime_aliases = _validate_runtime_identifiers(model["runtime_identifiers"], runtime_evidence)
+    runtime_aliases = _validate_runtime_identifiers(model["runtime_identifiers"], runtime_evidence, sku)
     _validate_ports(model["ports"])
     _validate_storage(model["storage"])
     output_values = [port["poe_out"] for port in model["ports"]["items"]]
@@ -371,16 +408,16 @@ def load_models(root: Path) -> list[dict[str, Any]]:
     return models
 
 
-def _secret_scan(value: Any, name: str) -> None:
-    serialized = json.dumps(value, ensure_ascii=False)
-    for pattern in SECRET_PATTERNS:
-        _require(not pattern.search(serialized), f"secret-like pattern found in {name}: {pattern.pattern}")
-
-
 def validate_catalog(root: Path) -> tuple[list[dict[str, Any]], dict[str, dict[str, Any]], dict[str, dict[str, Any]]]:
     root = Path(root)
-    for schema_path in sorted((root / "schema").glob("*.json")):
-        _load_json(schema_path)
+    try:
+        validate_json_schemas(root)
+    except SchemaValidationError as exc:
+        raise CatalogError(f"JSON Schema validation failed: {exc}") from exc
+    try:
+        scan_paths((root / "models", root / "evidence", root / "fixtures"))
+    except Exception as exc:
+        raise CatalogError(f"secret scanner failed closed: {exc}") from exc
     official, runtime = load_evidence(root)
     models = load_models(root)
     _require(models, "catalog contains no models")
@@ -389,18 +426,15 @@ def validate_catalog(root: Path) -> tuple[list[dict[str, Any]], dict[str, dict[s
     for model in models:
         filename = model.pop("__filename")
         validate_model(model, official, runtime, filename=filename)
-        _secret_scan(model, f"models/{filename}")
         sku = model["canonical_sku"]
         _require(sku not in skus, f"duplicate canonical SKU: {sku}")
         skus.add(sku)
-        for identifier_type, value, _ in _validate_runtime_identifiers(model["runtime_identifiers"], runtime):
+        for identifier_type, value, _ in _validate_runtime_identifiers(model["runtime_identifiers"], runtime, sku):
             alias = next(alias for alias in model["runtime_identifiers"][identifier_type] if alias["value"] == value)
             if alias["status"] == "verified":
                 owner_key = (identifier_type, value)
                 _require(owner_key not in verified_aliases, f"duplicate verified runtime alias: {identifier_type}={value!r} ({verified_aliases.get(owner_key)})")
                 verified_aliases[owner_key] = sku
-    for evidence_id, evidence in {**official, **runtime}.items():
-        _secret_scan(evidence, f"evidence/{evidence_id}")
     models.sort(key=lambda model: model["canonical_sku"].lower())
     _require([model["canonical_sku"] for model in models] == sorted(skus, key=str.lower), "model files must be in deterministic canonical SKU order")
     return models, official, runtime

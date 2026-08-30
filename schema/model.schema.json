@@ -35,7 +35,8 @@
         "model",
         "architecture",
         "cores",
-        "clock_mhz"
+        "clock_mhz",
+        "model_evidence_ids"
       ],
       "properties": {
         "model": {
@@ -61,6 +62,15 @@
             "null"
           ],
           "minimum": 1
+        },
+        "model_evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^runtime-[a-z0-9-]+$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
         }
       }
     },
@@ -144,7 +154,9 @@
       "required": [
         "source_type",
         "psu_slots",
-        "max_power_w",
+        "psu_unit_capacity_w",
+        "controller_reference_capacity_w",
+        "max_device_consumption_w",
         "absolute_max_poe_budget_w",
         "power_profiles"
       ],
@@ -167,13 +179,6 @@
           ],
           "minimum": 0
         },
-        "max_power_w": {
-          "type": [
-            "number",
-            "null"
-          ],
-          "minimum": 0
-        },
         "absolute_max_poe_budget_w": {
           "type": [
             "number",
@@ -187,6 +192,27 @@
           "items": {
             "$ref": "#/$defs/power_profile"
           }
+        },
+        "psu_unit_capacity_w": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "controller_reference_capacity_w": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "max_device_consumption_w": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
         }
       }
     },

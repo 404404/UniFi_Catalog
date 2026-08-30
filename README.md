@@ -33,12 +33,11 @@ policy remain in HermesStatus collection profiles.
 ## Authority model / 权威模型
 
 `models/` 是维护中的静态模型定义；`evidence/official/` 保存官方来源 URL、
-检索日期和简短事实说明；`evidence/runtime/` 只保存脱敏的 API/SSH 身份
-观察；`generated/catalog-index.json` 是工具生成的索引，不得手工编辑。
+检索日期和简短事实说明；`evidence/runtime/` 只保存脱敏的 API/SSH 身份观察或明确绑定的设备本地静态证据；`generated/catalog-index.json` 是工具生成的索引，不得手工编辑。
 
 `models/` holds maintained static model definitions. `evidence/official/`
 records authoritative URLs, retrieval dates, and short factual notes.
-`evidence/runtime/` contains only sanitized API/SSH identity observations.
+`evidence/runtime/` contains only sanitized API/SSH identity observations or explicitly bound device-local static evidence.
 `generated/catalog-index.json` is generated and must not be edited manually.
 
 官方来源优先级为 Ubiquiti Tech Specs、Ubiquiti Store/UI 产品页、官方
@@ -141,3 +140,14 @@ deterministic bundle SHA256 at image-build time. Phase 1 does not integrate
 HermesStatus, publish a package, fetch GitHub at runtime, or create a release.
 
 Legacy profile migration audit: [`docs/hermesstatus-migration-audit.md`](docs/hermesstatus-migration-audit.md).
+
+## Runtime evidence binding / 运行时证据绑定
+
+Every runtime evidence record binds a canonical SKU. Controller evidence may
+prove only api_model or sysid; SSH evidence may prove only ssh_model.
+qualified_runtime_static evidence may prove only an explicitly allowed static
+field and never becomes a resolver alias.
+
+每条运行时证据都绑定 canonical SKU。controller 证据只能证明 api_model 或
+sysid，SSH 证据只能证明 ssh_model；qualified_runtime_static 只能证明明确
+允许的静态字段，不能直接成为 resolver alias。
