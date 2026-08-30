@@ -61,12 +61,12 @@ Each model file is named from the exact canonical Ubiquiti SKU, for example
 management address, MAC prefix, or controller device ID is not canonical
 identity.
 
-运行时标识位于 `runtime_identifiers`，每条 alias 必须声明 `candidate` 或
+`power.power_profiles[]` 明确区分物理输入方式、协商 PoE 输入等级和控制器手动选择；`absolute_max_poe_budget_w` 与 profile budget 分开维护。运行时标识位于 `runtime_identifiers`，每条 alias 必须声明 `candidate` 或
 `verified`、provenance 和 evidence ID。只有 `verified` alias 才能被 resolver
 使用；匹配必须完全相等，顺序为 verified sysid、verified API model、verified
 SSH Model，最后才是在调用者明确声明官方 SKU 时匹配 canonical SKU。
 
-Runtime identifiers live under `runtime_identifiers`. Every alias declares
+Power profiles distinguish physical input method, negotiated PoE class, and controller-manual selection. `absolute_max_poe_budget_w` is separate from each profile's usable `poe_budget_w`; a verified profile may still have a null/unknown budget. Runtime identifiers live under `runtime_identifiers`. Every alias declares
 `candidate` or `verified`, provenance, and an evidence ID. Only `verified`
 aliases are resolver inputs. Matching is exact and ordered as verified sysid,
 verified API model, verified SSH Model, then canonical SKU only when the caller
@@ -74,15 +74,17 @@ explicitly supplies an official SKU.
 
 ## Phase 1 batch / 第一批型号
 
-本分支首批录入 15 个官方 SKU：UDW、UCG-Max、USW-Flex、USW-Flex-Mini、
-USW-Flex-2.5G-5、USW-Flex-2.5G-8-PoE、USW-Pro-Max-16-PoE、USW-Pro-HD-24、
-USW-Enterprise-8-PoE、US-XG-6POE、UAP-AC-M、UAP-IW-HD、U6-IW、
-U6-Enterprise-IW、U6-Mesh。请求中的 “AC In-Wall HD” 经官方页面核对为
+本分支首批录入 20 个官方 SKU：UDW、UCG-Max、USW-Flex、USW-Flex-Mini、
+USW-Flex-2.5G-5、USW-Flex-2.5G-8、USW-Flex-2.5G-8-PoE、USW-Pro-HD-24、
+USW-Pro-HD-24-PoE、USW-Pro-Max-16、USW-Pro-Max-16-PoE、USW-Pro-Max-24、
+USW-Pro-Max-24-PoE、USW-Enterprise-8-PoE、US-XG-6POE、UAP-AC-M、
+UAP-IW-HD、U6-IW、U6-Enterprise-IW、U6-Mesh。请求中的 “AC In-Wall HD” 经官方页面核对为
 `In-Wall HD`，canonical SKU 是 `UAP-IW-HD`。
 
-The first batch contains 15 exact official SKUs: UDW, UCG-Max, USW-Flex,
-USW-Flex-Mini, USW-Flex-2.5G-5, USW-Flex-2.5G-8-PoE,
-USW-Pro-Max-16-PoE, USW-Pro-HD-24, USW-Enterprise-8-PoE, US-XG-6POE,
+The first batch contains 20 exact official SKUs: UDW, UCG-Max, USW-Flex,
+USW-Flex-Mini, USW-Flex-2.5G-5, USW-Flex-2.5G-8, USW-Flex-2.5G-8-PoE,
+USW-Pro-HD-24, USW-Pro-HD-24-PoE, USW-Pro-Max-16, USW-Pro-Max-16-PoE,
+USW-Pro-Max-24, USW-Pro-Max-24-PoE, USW-Enterprise-8-PoE, US-XG-6POE,
 UAP-AC-M, UAP-IW-HD, U6-IW, U6-Enterprise-IW, and U6-Mesh. The requested
 “AC In-Wall HD” was checked against the official page and normalized to
 `In-Wall HD`, SKU `UAP-IW-HD`.
@@ -101,7 +103,10 @@ profile ID 猜测。
 4. Add only static model facts to `models/`; keep collection and live state out.
 5. Add sanitized runtime evidence separately. Start aliases as `candidate`.
 6. Run validation, regenerate the index, run tests, build twice and inspect the
-   diff and secret scan.
+   diff and secret scan. Power profiles must preserve field-level unknowns as
+   null and must not inherit from sibling SKUs.
+
+Power profile contract: [`docs/power-profiles.md`](docs/power-profiles.md)。
 
 详细规则 / Detailed rules: [`docs/contributing.md`](docs/contributing.md)、
 [`docs/model-contract.md`](docs/model-contract.md)、

@@ -1,0 +1,25 @@
+{
+  "id": "official-usw-pro-max-24-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "USW-Pro-Max-24",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/switching/usw-pro-max-24",
+      "publisher": "Ubiquiti",
+      "title": "Pro Max 24 - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official 16x1 GbE RJ45 ports, 8x2.5 GbE RJ45 ports, 2x10G SFP+ ports, 50 W maximum consumption, internal 60 W AC supply and USP RPS DC input."
+    }
+  ],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe_out",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
+  "notes": "Official 16x1 GbE RJ45 ports, 8x2.5 GbE RJ45 ports, 2x10G SFP+ ports, 50 W maximum consumption, internal 60 W AC supply and USP RPS DC input."
+}

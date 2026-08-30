@@ -3,12 +3,88 @@
   "canonical_sku": "U6-Mesh",
   "display_name": "U6 Mesh",
   "device_type": "ap",
-  "official_evidence_ids": ["official-u6-mesh-techspecs-20260830"],
-  "runtime_identifiers": {"api_model": [], "sysid": [], "ssh_model": []},
-  "ports": {"complete": true, "items": [
-    {"index": 1, "label": "GbE uplink", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": true, "poe_out": false, "poe_standard": "poe", "poe_max_power_w": null, "combo_group": null}
-  ]},
-  "storage": {"complete": false, "items": []},
-  "power": {"source_type": "poe_powered", "psu_slots": null, "max_power_w": 13, "poe_budget_w": null},
-  "fans": {"status": "unknown", "count": null}
+  "official_evidence_ids": [
+    "official-u6-mesh-techspecs-20260830"
+  ],
+  "runtime_identifiers": {
+    "api_model": [],
+    "sysid": [],
+    "ssh_model": []
+  },
+  "ports": {
+    "complete": true,
+    "items": [
+      {
+        "index": 1,
+        "label": "GbE uplink",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 1000,
+        "poe_in": true,
+        "poe_out": false,
+        "poe_standard": "poe",
+        "poe_max_power_w": null,
+        "combo_group": null
+      }
+    ]
+  },
+  "storage": {
+    "complete": false,
+    "items": []
+  },
+  "power": {
+    "source_type": "poe_powered",
+    "psu_slots": null,
+    "max_power_w": 13,
+    "absolute_max_poe_budget_w": 0,
+    "power_profiles": [
+      {
+        "id": "poe",
+        "status": "verified",
+        "selection_mode": "auto_detected",
+        "input_method": "poe",
+        "input_poe_class": "poe",
+        "input_capacity_w": null,
+        "poe_budget_w": null,
+        "field_evidence": {
+          "selection_mode": {
+            "status": "verified",
+            "evidence_ids": [
+              "official-u6-mesh-techspecs-20260830"
+            ]
+          },
+          "input_method": {
+            "status": "verified",
+            "evidence_ids": [
+              "official-u6-mesh-techspecs-20260830"
+            ]
+          },
+          "input_poe_class": {
+            "status": "verified",
+            "evidence_ids": [
+              "official-u6-mesh-techspecs-20260830"
+            ]
+          },
+          "input_capacity_w": {
+            "status": "unknown",
+            "evidence_ids": [
+              "official-u6-mesh-techspecs-20260830"
+            ]
+          },
+          "poe_budget_w": {
+            "status": "not_applicable",
+            "evidence_ids": [
+              "official-u6-mesh-techspecs-20260830"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "fans": {
+    "status": "unknown",
+    "count": null
+  }
 }

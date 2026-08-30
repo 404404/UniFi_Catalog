@@ -44,6 +44,11 @@ POWER_SOURCES = {
     "dc_or_external_adapter",
     "unknown",
 }
+POWER_PROFILE_STATUSES = {"verified", "candidate", "unsupported"}
+SELECTION_MODES = {"fixed", "auto_detected", "controller_manual"}
+INPUT_METHODS = {"ac_mains", "ac_adapter", "dc_adapter", "usb_c", "poe"}
+POWER_FIELD_STATUSES = {"verified", "candidate", "unknown", "not_applicable"}
+POWER_PROFILE_FIELDS = ("selection_mode", "input_method", "input_poe_class", "input_capacity_w", "poe_budget_w")
 FAN_STATUS = {"present", "absent", "unknown"}
 RUNTIME_KINDS = {"qualified_controller", "qualified_ssh"}
 SECRET_PATTERNS = (
@@ -188,15 +193,84 @@ def _validate_storage(storage: Any) -> None:
             _require(item["capacity_bytes"] <= item["max_capacity_bytes"], f"{name}: capacity exceeds maximum")
 
 
-def _validate_power(power: Any) -> None:
+def _validate_power_field_evidence(value: Any, field_evidence: Any, name: str, evidence: dict[str, dict[str, Any]]) -> None:
+    field_evidence = _object(field_evidence, name)
+    _keys(field_evidence, {"status", "evidence_ids"}, {"source_note"}, name)
+    status = field_evidence["status"]
+    _require(status in POWER_FIELD_STATUSES, f"{name}.status: invalid value")
+    evidence_ids = field_evidence["evidence_ids"]
+    _require(isinstance(evidence_ids, list) and len(evidence_ids) == len(set(evidence_ids)), f"{name}.evidence_ids: invalid value")
+    _require(all(isinstance(evidence_id, str) and evidence_id in evidence for evidence_id in evidence_ids), f"{name}.evidence_ids: unknown evidence reference")
+    source_note = field_evidence.get("source_note")
+    _require(source_note is None or (isinstance(source_note, str) and source_note.strip()), f"{name}.source_note: invalid value")
+    _require(evidence_ids or source_note, f"{name}: evidence_ids or source_note required")
+    if status in {"unknown", "not_applicable"}:
+        _require(value is None, f"{name}: {status} field must be null")
+    elif value is None:
+        _require(False, f"{name}: {status} field must not be null")
+
+
+def _validate_power(power: Any, evidence: dict[str, dict[str, Any]], *, poe_output_state: str) -> None:
     power = _object(power, "power")
-    _keys(power, {"source_type", "psu_slots", "max_power_w"}, {"poe_budget_w"}, "power")
+    _keys(power, {"source_type", "psu_slots", "max_power_w", "absolute_max_poe_budget_w", "power_profiles"}, set(), "power")
     _require(power["source_type"] in POWER_SOURCES, "power.source_type: invalid value")
     slots = power["psu_slots"]
     _require(slots is None or (isinstance(slots, int) and not isinstance(slots, bool) and slots >= 0), "power.psu_slots: invalid value")
     _number(power["max_power_w"], "power.max_power_w")
-    if "poe_budget_w" in power:
-        _number(power["poe_budget_w"], "power.poe_budget_w")
+    absolute = power["absolute_max_poe_budget_w"]
+    _number(absolute, "power.absolute_max_poe_budget_w")
+    profiles = power["power_profiles"]
+    _require(isinstance(profiles, list) and profiles, "power.power_profiles: at least one profile required")
+    profile_ids: set[str] = set()
+    for profile_number, profile in enumerate(profiles):
+        name = f"power.power_profiles[{profile_number}]"
+        profile = _object(profile, name)
+        _keys(profile, {"id", "status", "selection_mode", "input_method", "input_poe_class", "input_capacity_w", "poe_budget_w", "field_evidence"}, set(), name)
+        profile_id = profile["id"]
+        _require(isinstance(profile_id, str) and re.fullmatch(r"[a-z0-9][a-z0-9-]*", profile_id), f"{name}.id: invalid value")
+        _require(profile_id not in profile_ids, f"duplicate power profile id: {profile_id}")
+        profile_ids.add(profile_id)
+        _require(profile["status"] in POWER_PROFILE_STATUSES, f"{name}.status: invalid value")
+        selection_mode = profile["selection_mode"]
+        input_method = profile["input_method"]
+        input_poe_class = profile["input_poe_class"]
+        _require(selection_mode in SELECTION_MODES, f"{name}.selection_mode: invalid value")
+        _require(input_method in INPUT_METHODS, f"{name}.input_method: invalid value")
+        _require(input_poe_class is None or input_poe_class in POE_STANDARDS, f"{name}.input_poe_class: invalid value")
+        _number(profile["input_capacity_w"], f"{name}.input_capacity_w")
+        _number(profile["poe_budget_w"], f"{name}.poe_budget_w")
+        if selection_mode == "auto_detected":
+            _require(input_method == "poe", f"{name}: auto_detected profiles must use PoE input")
+        if selection_mode == "controller_manual":
+            _require(input_method == "dc_adapter", f"{name}: controller_manual profiles must use dc_adapter input")
+        if selection_mode == "fixed":
+            _require(input_method != "poe", f"{name}: fixed profiles cannot use negotiated PoE input")
+        if input_method == "poe":
+            _require(selection_mode == "auto_detected", f"{name}: PoE input must be auto_detected")
+        else:
+            _require(input_poe_class is None, f"{name}: non-PoE input cannot declare an input PoE class")
+        field_evidence = _object(profile["field_evidence"], f"{name}.field_evidence")
+        _keys(field_evidence, set(POWER_PROFILE_FIELDS), set(), f"{name}.field_evidence")
+        for field in POWER_PROFILE_FIELDS:
+            _validate_power_field_evidence(profile[field], field_evidence[field], f"{name}.field_evidence.{field}", evidence)
+        if poe_output_state == "none":
+            _require(absolute in {0, None}, "power.absolute_max_poe_budget_w: non-PoE model cannot have a positive budget")
+            _require(profile["poe_budget_w"] in {0, None}, f"{name}.poe_budget_w: non-PoE model cannot have a positive budget")
+        if absolute is not None and profile["poe_budget_w"] is not None:
+            _require(profile["poe_budget_w"] <= absolute, f"{name}.poe_budget_w exceeds power.absolute_max_poe_budget_w")
+
+
+def active_power_profiles(model: dict[str, Any], *, selection_mode: str | None = None) -> list[dict[str, Any]]:
+    """Return only qualified profiles; unsupported and candidate profiles are never active."""
+    profiles = [profile for profile in model["power"]["power_profiles"] if profile["status"] == "verified"]
+    if selection_mode is not None:
+        profiles = [profile for profile in profiles if profile["selection_mode"] == selection_mode]
+    return profiles
+
+
+def power_profile_budget(profile: dict[str, Any]) -> float | int | None:
+    """Preserve null as unknown; never coerce an unknown budget to zero."""
+    return profile["poe_budget_w"]
 
 
 def _validate_fans(fans: Any) -> None:
@@ -257,7 +331,9 @@ def validate_model(model: dict[str, Any], official_evidence: dict[str, dict[str,
     runtime_aliases = _validate_runtime_identifiers(model["runtime_identifiers"], runtime_evidence)
     _validate_ports(model["ports"])
     _validate_storage(model["storage"])
-    _validate_power(model["power"])
+    output_values = [port["poe_out"] for port in model["ports"]["items"]]
+    poe_output_state = "present" if any(value is True for value in output_values) else "none" if model["ports"]["complete"] and output_values and all(value is False for value in output_values) else "unknown"
+    _validate_power(model["power"], {**official_evidence, **runtime_evidence}, poe_output_state=poe_output_state)
     _validate_fans(model["fans"])
     return runtime_aliases
 
@@ -343,6 +419,7 @@ def normalized_model(model: dict[str, Any]) -> dict[str, Any]:
         result["storage"]["items"],
         key=lambda item: (item["type"], item["kind"], item["default_presence"], item["capacity_bytes"] is None, item["capacity_bytes"] or 0),
     )
+    result["power"]["power_profiles"] = sorted(result["power"]["power_profiles"], key=lambda profile: profile["id"])
     return result
 
 
@@ -373,6 +450,9 @@ def build_index(models: list[dict[str, Any]]) -> dict[str, Any]:
             "ports_complete": model["ports"]["complete"],
             "storage_complete": model["storage"]["complete"],
             "fan_status": model["fans"]["status"],
+            "absolute_max_poe_budget_w": model["power"]["absolute_max_poe_budget_w"],
+            "power_profile_count": len(model["power"]["power_profiles"]),
+            "verified_power_profile_ids": sorted(profile["id"] for profile in model["power"]["power_profiles"] if profile["status"] == "verified"),
             "verified_runtime_identifiers": verified,
         })
     return {"schema_version": 1, "model_count": len(index_models), "models": index_models}

@@ -17,55 +17,137 @@
     "fans"
   ],
   "properties": {
-    "schema_version": {"const": 1},
-    "canonical_sku": {"type": "string", "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"},
-    "display_name": {"type": "string", "minLength": 1},
-    "processor": {"type": "object", "additionalProperties": false, "required": ["model", "architecture", "cores", "clock_mhz"], "properties": {"model": {"type": ["string", "null"]}, "architecture": {"type": "string", "minLength": 1}, "cores": {"type": ["integer", "null"], "minimum": 1}, "clock_mhz": {"type": ["integer", "null"], "minimum": 1}}},
-    "device_type": {"enum": ["gateway", "switch", "ap"]},
+    "schema_version": {
+      "const": 1
+    },
+    "canonical_sku": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "processor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model",
+        "architecture",
+        "cores",
+        "clock_mhz"
+      ],
+      "properties": {
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "architecture": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cores": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "clock_mhz": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      }
+    },
+    "device_type": {
+      "enum": [
+        "gateway",
+        "switch",
+        "ap"
+      ]
+    },
     "official_evidence_ids": {
       "type": "array",
-      "items": {"type": "string", "pattern": "^official-[a-z0-9-]+$"},
+      "items": {
+        "type": "string",
+        "pattern": "^official-[a-z0-9-]+$"
+      },
       "minItems": 1,
       "uniqueItems": true
     },
     "runtime_identifiers": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["api_model", "sysid", "ssh_model"],
+      "required": [
+        "api_model",
+        "sysid",
+        "ssh_model"
+      ],
       "properties": {
-        "api_model": {"$ref": "#/$defs/runtime_aliases"},
-        "sysid": {"$ref": "#/$defs/runtime_aliases"},
-        "ssh_model": {"$ref": "#/$defs/runtime_aliases"}
+        "api_model": {
+          "$ref": "#/$defs/runtime_aliases"
+        },
+        "sysid": {
+          "$ref": "#/$defs/runtime_aliases"
+        },
+        "ssh_model": {
+          "$ref": "#/$defs/runtime_aliases"
+        }
       }
     },
     "ports": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["complete", "items"],
+      "required": [
+        "complete",
+        "items"
+      ],
       "properties": {
-        "complete": {"type": "boolean"},
+        "complete": {
+          "type": "boolean"
+        },
         "items": {
           "type": "array",
-          "items": {"$ref": "#/$defs/port"}
+          "items": {
+            "$ref": "#/$defs/port"
+          }
         }
       }
     },
     "storage": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["complete", "items"],
+      "required": [
+        "complete",
+        "items"
+      ],
       "properties": {
-        "complete": {"type": "boolean"},
+        "complete": {
+          "type": "boolean"
+        },
         "items": {
           "type": "array",
-          "items": {"$ref": "#/$defs/storage_item"}
+          "items": {
+            "$ref": "#/$defs/storage_item"
+          }
         }
       }
     },
     "power": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["source_type", "psu_slots", "max_power_w"],
+      "required": [
+        "source_type",
+        "psu_slots",
+        "max_power_w",
+        "absolute_max_poe_budget_w",
+        "power_profiles"
+      ],
       "properties": {
         "source_type": {
           "enum": [
@@ -78,36 +160,97 @@
             "unknown"
           ]
         },
-        "psu_slots": {"type": ["integer", "null"], "minimum": 0},
-        "max_power_w": {"type": ["number", "null"], "minimum": 0},
-        "poe_budget_w": {"type": ["number", "null"], "minimum": 0}
+        "psu_slots": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "max_power_w": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "absolute_max_poe_budget_w": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "power_profiles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/power_profile"
+          }
+        }
       }
     },
     "fans": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "count"],
+      "required": [
+        "status",
+        "count"
+      ],
       "properties": {
-        "status": {"enum": ["present", "absent", "unknown"]},
-        "count": {"type": ["integer", "null"], "minimum": 0}
+        "status": {
+          "enum": [
+            "present",
+            "absent",
+            "unknown"
+          ]
+        },
+        "count": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
       }
     }
   },
   "$defs": {
     "runtime_aliases": {
       "type": "array",
-      "items": {"$ref": "#/$defs/runtime_alias"},
+      "items": {
+        "$ref": "#/$defs/runtime_alias"
+      },
       "uniqueItems": true
     },
     "runtime_alias": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["value", "status", "provenance", "evidence_id"],
+      "required": [
+        "value",
+        "status",
+        "provenance",
+        "evidence_id"
+      ],
       "properties": {
-        "value": {"type": "string", "minLength": 1},
-        "status": {"enum": ["candidate", "verified"]},
-        "provenance": {"type": "string", "minLength": 1},
-        "evidence_id": {"type": "string", "minLength": 1}
+        "value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "verified"
+          ]
+        },
+        "provenance": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_id": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "port": {
@@ -126,39 +269,269 @@
         "combo_group"
       ],
       "properties": {
-        "index": {"type": "integer", "minimum": 1},
-        "label": {"type": "string", "minLength": 1},
-        "connector": {"enum": ["rj45", "sfp", "sfp_plus", "sfp28", "other"]},
+        "index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "connector": {
+          "enum": [
+            "rj45",
+            "sfp",
+            "sfp_plus",
+            "sfp28",
+            "other"
+          ]
+        },
         "roles": {
           "type": "array",
-          "items": {"enum": ["lan", "wan"]},
+          "items": {
+            "enum": [
+              "lan",
+              "wan"
+            ]
+          },
           "minItems": 1,
           "uniqueItems": true
         },
         "max_speed_mbps": {
-          "type": ["integer", "null"],
-          "enum": [10, 100, 1000, 2500, 5000, 10000, 25000, 100000, null]
+          "type": [
+            "integer",
+            "null"
+          ],
+          "enum": [
+            10,
+            100,
+            1000,
+            2500,
+            5000,
+            10000,
+            25000,
+            100000,
+            null
+          ]
         },
-        "poe_in": {"type": ["boolean", "null"]},
-        "poe_out": {"type": ["boolean", "null"]},
+        "poe_in": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "poe_out": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
         "poe_standard": {
-          "type": ["string", "null"],
-          "enum": ["poe", "poe+", "poe++", "poe+++", null]
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "poe",
+            "poe+",
+            "poe++",
+            "poe+++",
+            null
+          ]
         },
-        "poe_max_power_w": {"type": ["number", "null"], "minimum": 0},
-        "combo_group": {"type": ["string", "null"]}
+        "poe_max_power_w": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "combo_group": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       }
     },
     "storage_item": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["type", "kind", "default_presence", "capacity_bytes", "max_capacity_bytes"],
+      "required": [
+        "type",
+        "kind",
+        "default_presence",
+        "capacity_bytes",
+        "max_capacity_bytes"
+      ],
       "properties": {
-        "type": {"enum": ["emmc", "ssd", "sata_ssd", "nvme", "microsd", "tf", "other"]},
-        "kind": {"enum": ["fixed_device", "user_slot", "removable_media"]},
-        "default_presence": {"enum": ["present", "not_populated", "unknown"]},
-        "capacity_bytes": {"type": ["integer", "null"], "minimum": 0},
-        "max_capacity_bytes": {"type": ["integer", "null"], "minimum": 0}
+        "type": {
+          "enum": [
+            "emmc",
+            "ssd",
+            "sata_ssd",
+            "nvme",
+            "microsd",
+            "tf",
+            "other"
+          ]
+        },
+        "kind": {
+          "enum": [
+            "fixed_device",
+            "user_slot",
+            "removable_media"
+          ]
+        },
+        "default_presence": {
+          "enum": [
+            "present",
+            "not_populated",
+            "unknown"
+          ]
+        },
+        "capacity_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "max_capacity_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "power_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status",
+        "selection_mode",
+        "input_method",
+        "input_poe_class",
+        "input_capacity_w",
+        "poe_budget_w",
+        "field_evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "status": {
+          "enum": [
+            "verified",
+            "candidate",
+            "unsupported"
+          ]
+        },
+        "selection_mode": {
+          "enum": [
+            "fixed",
+            "auto_detected",
+            "controller_manual"
+          ]
+        },
+        "input_method": {
+          "enum": [
+            "ac_mains",
+            "ac_adapter",
+            "dc_adapter",
+            "usb_c",
+            "poe"
+          ]
+        },
+        "input_poe_class": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "poe",
+            "poe+",
+            "poe++",
+            "poe+++",
+            null
+          ]
+        },
+        "input_capacity_w": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "poe_budget_w": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "field_evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "selection_mode",
+            "input_method",
+            "input_poe_class",
+            "input_capacity_w",
+            "poe_budget_w"
+          ],
+          "properties": {
+            "selection_mode": {
+              "$ref": "#/$defs/power_field_evidence"
+            },
+            "input_method": {
+              "$ref": "#/$defs/power_field_evidence"
+            },
+            "input_poe_class": {
+              "$ref": "#/$defs/power_field_evidence"
+            },
+            "input_capacity_w": {
+              "$ref": "#/$defs/power_field_evidence"
+            },
+            "poe_budget_w": {
+              "$ref": "#/$defs/power_field_evidence"
+            }
+          }
+        }
+      }
+    },
+    "power_field_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "evidence_ids"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "verified",
+            "candidate",
+            "unknown",
+            "not_applicable"
+          ]
+        },
+        "evidence_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "source_note": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     }
   }

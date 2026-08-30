@@ -11,6 +11,15 @@
       "evidence_note": "Official four 10 GbE RJ45 PoE++ ports, two 10G SFP+ ports and 170 W total available PoE."
     }
   ],
-  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
   "notes": "The source presents the official SKU as US-XG-6POE and labels the product XG 6 PoE (Gen1)."
 }

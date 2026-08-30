@@ -11,6 +11,16 @@
       "evidence_note": "Official identity, five 2.5 GbE ports, selectable NVMe capacity and maximum power consumption. The page does not establish a physical fan count."
     }
   ],
-  "fields_supported": ["canonical_sku", "display_name", "processor", "ports.topology", "ports.max_speed_mbps", "storage", "power"],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "processor",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "storage",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
   "notes": "Selectable NVMe is represented as a user slot with a 2 TB maximum and no default installed capacity."
 }

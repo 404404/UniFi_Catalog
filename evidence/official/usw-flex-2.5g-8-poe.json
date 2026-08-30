@@ -11,6 +11,15 @@
       "evidence_note": "Official eight 2.5 GbE PoE++ ports, one 10 GbE RJ45 PoE+++ input, one 10G SFP+ port and power budget."
     }
   ],
-  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
   "notes": "The 10 GbE RJ45 is modeled as the PoE+++ input; the eight 2.5 GbE RJ45 ports are PoE++ output ports."
 }

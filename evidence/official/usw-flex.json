@@ -11,6 +11,15 @@
       "evidence_note": "Official five-port 1 GbE layout, PoE input/output classes and power consumption."
     }
   ],
-  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
   "notes": "The source describes the upstream PoE++ input and four PoE+ output ports; storage and physical fan capability are not established."
 }

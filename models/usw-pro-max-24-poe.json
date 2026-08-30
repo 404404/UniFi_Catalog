@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "canonical_sku": "USW-Pro-Max-16-PoE",
-  "display_name": "Pro Max 16 PoE",
+  "canonical_sku": "USW-Pro-Max-24-PoE",
+  "display_name": "Pro Max 24 PoE",
   "device_type": "switch",
   "official_evidence_ids": [
-    "official-usw-pro-max-16-poe-techspecs-20260830"
+    "official-usw-pro-max-24-poe-techspecs-20260830"
   ],
   "runtime_identifiers": {
     "api_model": [],
@@ -136,8 +136,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
         "combo_group": null
       },
       {
@@ -150,8 +150,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
         "combo_group": null
       },
       {
@@ -164,8 +164,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
         "combo_group": null
       },
       {
@@ -178,8 +178,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
         "combo_group": null
       },
       {
@@ -189,7 +189,7 @@
         "roles": [
           "lan"
         ],
-        "max_speed_mbps": 2500,
+        "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe++",
@@ -203,7 +203,7 @@
         "roles": [
           "lan"
         ],
-        "max_speed_mbps": 2500,
+        "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe++",
@@ -217,7 +217,7 @@
         "roles": [
           "lan"
         ],
-        "max_speed_mbps": 2500,
+        "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe++",
@@ -231,7 +231,7 @@
         "roles": [
           "lan"
         ],
-        "max_speed_mbps": 2500,
+        "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe++",
@@ -240,6 +240,118 @@
       },
       {
         "index": 17,
+        "label": "RJ45-17",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 2500,
+        "poe_in": false,
+        "poe_out": true,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
+        "combo_group": null
+      },
+      {
+        "index": 18,
+        "label": "RJ45-18",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 2500,
+        "poe_in": false,
+        "poe_out": true,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
+        "combo_group": null
+      },
+      {
+        "index": 19,
+        "label": "RJ45-19",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 2500,
+        "poe_in": false,
+        "poe_out": true,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
+        "combo_group": null
+      },
+      {
+        "index": 20,
+        "label": "RJ45-20",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 2500,
+        "poe_in": false,
+        "poe_out": true,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
+        "combo_group": null
+      },
+      {
+        "index": 21,
+        "label": "RJ45-21",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 2500,
+        "poe_in": false,
+        "poe_out": true,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
+        "combo_group": null
+      },
+      {
+        "index": 22,
+        "label": "RJ45-22",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 2500,
+        "poe_in": false,
+        "poe_out": true,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
+        "combo_group": null
+      },
+      {
+        "index": 23,
+        "label": "RJ45-23",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 2500,
+        "poe_in": false,
+        "poe_out": true,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
+        "combo_group": null
+      },
+      {
+        "index": 24,
+        "label": "RJ45-24",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 2500,
+        "poe_in": false,
+        "poe_out": true,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
+        "combo_group": null
+      },
+      {
+        "index": 25,
         "label": "SFP+-1",
         "connector": "sfp_plus",
         "roles": [
@@ -253,7 +365,7 @@
         "combo_group": null
       },
       {
-        "index": 18,
+        "index": 26,
         "label": "SFP+-2",
         "connector": "sfp_plus",
         "roles": [
@@ -273,48 +385,89 @@
     "items": []
   },
   "power": {
-    "source_type": "external_adapter",
-    "psu_slots": null,
-    "max_power_w": 210,
-    "absolute_max_poe_budget_w": 180,
+    "source_type": "integrated_ac_with_dc_backup",
+    "psu_slots": 1,
+    "max_power_w": 450,
+    "absolute_max_poe_budget_w": 400,
     "power_profiles": [
       {
-        "id": "ac-adapter-210w",
+        "id": "ac-mains",
         "status": "verified",
         "selection_mode": "fixed",
-        "input_method": "ac_adapter",
+        "input_method": "ac_mains",
         "input_poe_class": null,
-        "input_capacity_w": 210,
-        "poe_budget_w": 180,
+        "input_capacity_w": 550,
+        "poe_budget_w": 400,
         "field_evidence": {
           "selection_mode": {
             "status": "verified",
             "evidence_ids": [
-              "official-usw-pro-max-16-poe-techspecs-20260830"
+              "official-usw-pro-max-24-poe-techspecs-20260830"
             ]
           },
           "input_method": {
             "status": "verified",
             "evidence_ids": [
-              "official-usw-pro-max-16-poe-techspecs-20260830"
+              "official-usw-pro-max-24-poe-techspecs-20260830"
             ]
           },
           "input_poe_class": {
             "status": "not_applicable",
             "evidence_ids": [
-              "official-usw-pro-max-16-poe-techspecs-20260830"
+              "official-usw-pro-max-24-poe-techspecs-20260830"
             ]
           },
           "input_capacity_w": {
             "status": "verified",
             "evidence_ids": [
-              "official-usw-pro-max-16-poe-techspecs-20260830"
+              "official-usw-pro-max-24-poe-techspecs-20260830"
             ]
           },
           "poe_budget_w": {
             "status": "verified",
             "evidence_ids": [
-              "official-usw-pro-max-16-poe-techspecs-20260830"
+              "official-usw-pro-max-24-poe-techspecs-20260830"
+            ]
+          }
+        }
+      },
+      {
+        "id": "dc-backup",
+        "status": "verified",
+        "selection_mode": "fixed",
+        "input_method": "dc_adapter",
+        "input_poe_class": null,
+        "input_capacity_w": null,
+        "poe_budget_w": null,
+        "field_evidence": {
+          "selection_mode": {
+            "status": "verified",
+            "evidence_ids": [
+              "official-usw-pro-max-24-poe-techspecs-20260830"
+            ]
+          },
+          "input_method": {
+            "status": "verified",
+            "evidence_ids": [
+              "official-usw-pro-max-24-poe-techspecs-20260830"
+            ]
+          },
+          "input_poe_class": {
+            "status": "not_applicable",
+            "evidence_ids": [
+              "official-usw-pro-max-24-poe-techspecs-20260830"
+            ]
+          },
+          "input_capacity_w": {
+            "status": "unknown",
+            "evidence_ids": [
+              "official-usw-pro-max-24-poe-techspecs-20260830"
+            ]
+          },
+          "poe_budget_w": {
+            "status": "unknown",
+            "evidence_ids": [
+              "official-usw-pro-max-24-poe-techspecs-20260830"
             ]
           }
         }

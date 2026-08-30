@@ -16,3 +16,9 @@ artifacts. CI builds into two clean temporary directories and compares the
 resulting `catalog.json` bytes and SHA256. A Phase 1 release is a pinned
 source revision plus the deterministic bundle SHA256; there is no package or
 runtime GitHub fetch.
+
+
+Semantic checks include the distinction between fixed, auto-detected and
+controller-manual power profiles; field-level `unknown` values; absolute versus
+profile PoE budgets; non-PoE zero-capability constraints; and exclusion of
+unsupported profiles from automatic activation.

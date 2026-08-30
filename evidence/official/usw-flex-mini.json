@@ -11,6 +11,15 @@
       "evidence_note": "Official five-port 1 GbE layout, USB-C/PoE input methods and maximum power consumption."
     }
   ],
-  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe_in", "power"],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe_in",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
   "notes": "The source does not list PoE output, storage capability or physical fan capability."
 }

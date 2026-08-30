@@ -11,6 +11,15 @@
       "evidence_note": "Official eight 2.5 GbE PoE+ ports, two 10G SFP+ ports and 120 W PoE availability."
     }
   ],
-  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
   "notes": "The source labels this official product as vintage; the canonical SKU remains USW-Enterprise-8-PoE."
 }

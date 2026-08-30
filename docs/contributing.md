@@ -3,8 +3,9 @@
 1. Confirm the exact official SKU and normalize it to the model filename.
 2. Add one official evidence record with URL, publisher, retrieval date and a
    short normalized evidence note.
-3. Add the static model definition. Do not add live state or collection
-   commands.
+3. Add the static model definition. Keep physical input, power profiles,
+   field-level evidence and PoE budgets explicit. Do not add live state or
+   collection commands.
 4. Add runtime aliases only with a separate sanitized evidence record. Mark
    them `candidate` until the qualification bar is met.
 5. Run validation, regenerate the checked-in index, build twice and run tests.

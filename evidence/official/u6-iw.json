@@ -11,6 +11,15 @@
       "evidence_note": "Official data-in GbE port, four data-out GbE ports, one PoE output and 13 W maximum power consumption."
     }
   ],
-  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
   "notes": "The source identifies one PoE output but does not identify its face position by port index, so output mapping is kept incomplete."
 }

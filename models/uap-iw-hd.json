@@ -3,16 +3,144 @@
   "canonical_sku": "UAP-IW-HD",
   "display_name": "In-Wall HD",
   "device_type": "ap",
-  "official_evidence_ids": ["official-uap-iw-hd-techspecs-20260830"],
-  "runtime_identifiers": {"api_model": [], "sysid": [], "ssh_model": []},
-  "ports": {"complete": true, "items": [
-    {"index": 1, "label": "GbE data-in", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": true, "poe_out": false, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
-    {"index": 2, "label": "GbE data-out-1", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": null, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
-    {"index": 3, "label": "GbE data-out-2", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": null, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
-    {"index": 4, "label": "GbE data-out-3", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": null, "poe_standard": null, "poe_max_power_w": null, "combo_group": null},
-    {"index": 5, "label": "GbE data-out-4", "connector": "rj45", "roles": ["lan"], "max_speed_mbps": 1000, "poe_in": false, "poe_out": null, "poe_standard": null, "poe_max_power_w": null, "combo_group": null}
-  ]},
-  "storage": {"complete": false, "items": []},
-  "power": {"source_type": "poe_powered", "psu_slots": null, "max_power_w": 11, "poe_budget_w": null},
-  "fans": {"status": "unknown", "count": null}
+  "official_evidence_ids": [
+    "official-uap-iw-hd-techspecs-20260830"
+  ],
+  "runtime_identifiers": {
+    "api_model": [],
+    "sysid": [],
+    "ssh_model": []
+  },
+  "ports": {
+    "complete": true,
+    "items": [
+      {
+        "index": 1,
+        "label": "GbE data-in",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 1000,
+        "poe_in": true,
+        "poe_out": false,
+        "poe_standard": null,
+        "poe_max_power_w": null,
+        "combo_group": null
+      },
+      {
+        "index": 2,
+        "label": "GbE data-out-1",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 1000,
+        "poe_in": false,
+        "poe_out": null,
+        "poe_standard": null,
+        "poe_max_power_w": null,
+        "combo_group": null
+      },
+      {
+        "index": 3,
+        "label": "GbE data-out-2",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 1000,
+        "poe_in": false,
+        "poe_out": null,
+        "poe_standard": null,
+        "poe_max_power_w": null,
+        "combo_group": null
+      },
+      {
+        "index": 4,
+        "label": "GbE data-out-3",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 1000,
+        "poe_in": false,
+        "poe_out": null,
+        "poe_standard": null,
+        "poe_max_power_w": null,
+        "combo_group": null
+      },
+      {
+        "index": 5,
+        "label": "GbE data-out-4",
+        "connector": "rj45",
+        "roles": [
+          "lan"
+        ],
+        "max_speed_mbps": 1000,
+        "poe_in": false,
+        "poe_out": null,
+        "poe_standard": null,
+        "poe_max_power_w": null,
+        "combo_group": null
+      }
+    ]
+  },
+  "storage": {
+    "complete": false,
+    "items": []
+  },
+  "power": {
+    "source_type": "poe_powered",
+    "psu_slots": null,
+    "max_power_w": 11,
+    "absolute_max_poe_budget_w": null,
+    "power_profiles": [
+      {
+        "id": "poe",
+        "status": "verified",
+        "selection_mode": "auto_detected",
+        "input_method": "poe",
+        "input_poe_class": null,
+        "input_capacity_w": null,
+        "poe_budget_w": null,
+        "field_evidence": {
+          "selection_mode": {
+            "status": "verified",
+            "evidence_ids": [
+              "official-uap-iw-hd-techspecs-20260830"
+            ]
+          },
+          "input_method": {
+            "status": "verified",
+            "evidence_ids": [
+              "official-uap-iw-hd-techspecs-20260830"
+            ]
+          },
+          "input_poe_class": {
+            "status": "unknown",
+            "evidence_ids": [
+              "official-uap-iw-hd-techspecs-20260830"
+            ]
+          },
+          "input_capacity_w": {
+            "status": "unknown",
+            "evidence_ids": [
+              "official-uap-iw-hd-techspecs-20260830"
+            ]
+          },
+          "poe_budget_w": {
+            "status": "unknown",
+            "evidence_ids": [
+              "official-uap-iw-hd-techspecs-20260830"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "fans": {
+    "status": "unknown",
+    "count": null
+  }
 }

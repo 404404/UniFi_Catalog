@@ -1,0 +1,25 @@
+{
+  "id": "official-usw-flex-2-5g-8-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "USW-Flex-2.5G-8",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/switching/usw-flex-2-5g-8",
+      "publisher": "Ubiquiti",
+      "title": "Flex 2.5G - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official 8x2.5 GbE RJ45 ports, 1x10 GbE RJ45 port, 1x10G SFP+ port, no PoE output, 14 W maximum consumption, USB Type-C 5 V 3 A input, PoE+ input and external 15 W AC/DC adapter. No combo relationship is asserted."
+    }
+  ],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe_out",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
+  "notes": "Official 8x2.5 GbE RJ45 ports, 1x10 GbE RJ45 port, 1x10G SFP+ port, no PoE output, 14 W maximum consumption, USB Type-C 5 V 3 A input, PoE+ input and external 15 W AC/DC adapter. No combo relationship is asserted."
+}

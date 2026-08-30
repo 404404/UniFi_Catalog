@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "model_count": 15,
+  "model_count": 20,
   "models": [
     {
       "canonical_sku": "U6-Enterprise-IW",
@@ -11,6 +11,11 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": null,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "poe"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -26,6 +31,11 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": null,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "poe"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -41,6 +51,11 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 0,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "poe"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -56,6 +71,11 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 0,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "poe"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -71,6 +91,11 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": null,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "poe"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -86,6 +111,11 @@
       "ports_complete": true,
       "storage_complete": true,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 0,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "usb-c"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -101,6 +131,11 @@
       "ports_complete": true,
       "storage_complete": true,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 420,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "ac-mains"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -116,6 +151,11 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 170,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "dc-adapter"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -131,6 +171,11 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 120,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "ac-mains"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -146,6 +191,14 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 46,
+      "power_profile_count": 4,
+      "verified_power_profile_ids": [
+        "poe",
+        "poe-adapter-60w",
+        "poe-plus",
+        "poe-plus-plus"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -161,6 +214,34 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 0,
+      "power_profile_count": 2,
+      "verified_power_profile_ids": [
+        "poe",
+        "usb-c"
+      ],
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Flex-2.5G-8",
+      "display_name": "Flex 2.5G",
+      "device_type": "switch",
+      "source_file": "models/usw-flex-2.5g-8.json",
+      "port_count": 10,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 0,
+      "power_profile_count": 3,
+      "verified_power_profile_ids": [
+        "ac-adapter",
+        "poe-plus",
+        "usb-c"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -176,6 +257,16 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 196,
+      "power_profile_count": 6,
+      "verified_power_profile_ids": [
+        "ac-adapter-210w",
+        "dc-210w",
+        "dc-60w",
+        "poe-plus",
+        "poe-plus-plus",
+        "poe-plus-plus-plus"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -191,6 +282,12 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 0,
+      "power_profile_count": 2,
+      "verified_power_profile_ids": [
+        "poe",
+        "usb-c"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -206,6 +303,54 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 0,
+      "power_profile_count": 2,
+      "verified_power_profile_ids": [
+        "ac-mains",
+        "dc-backup"
+      ],
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Pro-HD-24-PoE",
+      "display_name": "Pro HD 24 PoE",
+      "device_type": "switch",
+      "source_file": "models/usw-pro-hd-24-poe.json",
+      "port_count": 28,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 600,
+      "power_profile_count": 2,
+      "verified_power_profile_ids": [
+        "ac-mains",
+        "dc-backup"
+      ],
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Pro-Max-16",
+      "display_name": "Pro Max 16",
+      "device_type": "switch",
+      "source_file": "models/usw-pro-max-16.json",
+      "port_count": 18,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 0,
+      "power_profile_count": 2,
+      "verified_power_profile_ids": [
+        "ac-adapter",
+        "usb-c"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],
@@ -221,6 +366,53 @@
       "ports_complete": true,
       "storage_complete": false,
       "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 180,
+      "power_profile_count": 1,
+      "verified_power_profile_ids": [
+        "ac-adapter-210w"
+      ],
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Pro-Max-24",
+      "display_name": "Pro Max 24",
+      "device_type": "switch",
+      "source_file": "models/usw-pro-max-24.json",
+      "port_count": 26,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 0,
+      "power_profile_count": 2,
+      "verified_power_profile_ids": [
+        "ac-mains",
+        "dc-backup"
+      ],
+      "verified_runtime_identifiers": {
+        "api_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USW-Pro-Max-24-PoE",
+      "display_name": "Pro Max 24 PoE",
+      "device_type": "switch",
+      "source_file": "models/usw-pro-max-24-poe.json",
+      "port_count": 26,
+      "ports_complete": true,
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "absolute_max_poe_budget_w": 400,
+      "power_profile_count": 2,
+      "verified_power_profile_ids": [
+        "ac-mains",
+        "dc-backup"
+      ],
       "verified_runtime_identifiers": {
         "api_model": [],
         "sysid": [],

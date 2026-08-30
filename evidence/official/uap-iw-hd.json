@@ -11,6 +11,15 @@
       "evidence_note": "Official product identity, five GbE RJ45 ports and one PoE passthrough output."
     }
   ],
-  "fields_supported": ["canonical_sku", "display_name", "ports.topology", "ports.max_speed_mbps", "ports.poe", "power"],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
   "notes": "The requested label AC In-Wall HD is not the official product name; the official page identifies this model as In-Wall HD, SKU UAP-IW-HD."
 }

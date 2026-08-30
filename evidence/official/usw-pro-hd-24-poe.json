@@ -1,0 +1,25 @@
+{
+  "id": "official-usw-pro-hd-24-poe-techspecs-20260830",
+  "kind": "official_spec",
+  "canonical_sku": "USW-Pro-HD-24-PoE",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/switching/usw-pro-hd-24-poe",
+      "publisher": "Ubiquiti",
+      "title": "Pro HD 24 PoE - Tech Specs",
+      "retrieved_on": "2026-08-30",
+      "evidence_note": "Official 22x2.5 GbE RJ45 PoE++ ports, 2x10 GbE RJ45 PoE++ ports, 4x10G SFP+ ports, 600 W PoE availability, internal 660 W AC supply and USP RPS DC input."
+    }
+  ],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
+  "notes": "Official 22x2.5 GbE RJ45 PoE++ ports, 2x10 GbE RJ45 PoE++ ports, 4x10G SFP+ ports, 600 W PoE availability, internal 660 W AC supply and USP RPS DC input."
+}

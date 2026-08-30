@@ -28,7 +28,7 @@ catalog unchanged.
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `storage.*.present` | dynamic storage presence | runtime state | KEEP in HermesStatus |
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `storage.*.observed` | runtime observation | runtime state | KEEP in HermesStatus |
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `poe.supported` | fixed PoE capability | corroborated by official port layout | MIGRATE structurally into the physical port table; no redundant boolean |
-| 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `poe.total_max_power_w` | fixed PoE budget | corroborated by official 420 W PoE budget | MIGRATE as `power.poe_budget_w=420` |
+| 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `poe.total_max_power_w` | fixed PoE budget | corroborated by official 420 W PoE budget | MIGRATE as `power.absolute_max_poe_budget_w=420` and a qualified profile budget |
 | 404404/HermesStatus | same | `clients/unifi_profiles/udw.json` | `poe.port_max_power_w` | per-port static PoE capability | legacy values conflict with the official page's class grouping/order and lack a source note | REVIEW; catalog uses independently verified class grouping only |
 | 404404/HermesStatus | same | `clients/unifi_profiles/ucg-max.json` | `cpu_model` | fixed processor identity | legacy/community-level value; official page gives only Cortex-A53/4-core/1.5 GHz | REVIEW; exact Qualcomm model is not authoritative in this revision |
 | 404404/HermesStatus | same | `clients/unifi_profiles/ucg-max.json` | `power.psu_slots` | physical power capability | `0` conflates no internal PSU with external adapter | MIGRATE normalized as external adapter with `psu_slots=null` |
@@ -78,7 +78,7 @@ HermesStatus, the following legacy fields may be removed or made derived:
 | HermesStatus profile area | Future catalog source | Qualification prerequisite |
 |---|---|---|
 | `cpu_model` and other fixed processor facts | model `processor` | official source coverage for exact chip identity, if exact identity is needed |
-| `power.psu_slots`, static max power and PoE budget | model `power` | catalog revision and bundle hash pinned at image build |
+| `power.psu_slots`, static max power and PoE profile budgets | model `power` and `power_profiles` | catalog revision and bundle hash pinned at image build |
 | `poe` boolean and per-port power map | model `ports` and derived PoE classification | exact port index/class mapping qualified per model |
 | fixed storage capability/capacity | model `storage` | catalog storage completeness semantics consumed by the profile loader |
 | any physical fan claim | model `fans` | physical evidence, not merely hwmon/fan channels |

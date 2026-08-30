@@ -11,6 +11,17 @@
       "evidence_note": "Official port layout, PoE classes and power/storage specifications. The page does not establish a physical fan count."
     }
   ],
-  "fields_supported": ["canonical_sku", "display_name", "processor", "ports.topology", "ports.max_speed_mbps", "ports.poe", "storage", "power"],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "processor",
+    "ports.topology",
+    "ports.max_speed_mbps",
+    "ports.poe",
+    "storage",
+    "power",
+    "power_profiles",
+    "power.absolute_max_poe_budget_w"
+  ],
   "notes": "Runtime model identifiers are intentionally not inferred from this static page."
 }
