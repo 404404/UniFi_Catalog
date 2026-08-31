@@ -76,6 +76,41 @@ class CatalogTests(unittest.TestCase):
         self.assertIsNone(resolve_model([model], "UCG-Max"))
         self.assertIs(resolve_model([model], "UCG-Max", explicit_sku=True), model)
 
+    def test_qualified_runtime_aliases_resolve_to_exact_skus(self):
+        cases = (
+            ("udw.json", "api_model", "UniFi Dream Wall"),
+            ("udw.json", "ssh_model", "Annapurna Labs Alpine V2 UBNT"),
+            ("udw.json", "sysid", "0xea2a"),
+            ("ucg-max.json", "api_model", "UCG Max"),
+            ("ucg-max.json", "ssh_model", "Qualcomm Technologies, Inc. IPQ5332/AP-MI03.1"),
+            ("usw-flex-mini.json", "api_model", "USW Flex Mini"),
+        )
+        for filename, identifier_type, value in cases:
+            with self.subTest(identifier_type=identifier_type, value=value):
+                model = self.model(filename)
+                self.assertIs(resolve_model([model], value, identifier_type=identifier_type), model)
+
+    def test_ssh_alias_qualification_does_not_override_static_soc(self):
+        model = self.model("ucg-max.json")
+        processor_before = copy.deepcopy(model["processor"])
+        validate_model(model, self.official, self.runtime)
+        self.assertEqual(model["processor"], processor_before)
+        self.assertEqual(model["runtime_identifiers"]["ssh_model"][0]["value"], "Qualcomm Technologies, Inc. IPQ5332/AP-MI03.1")
+        self.assertNotEqual(model["processor"]["model"], model["runtime_identifiers"]["ssh_model"][0]["value"])
+
+    def test_same_text_in_different_alias_types_is_typed(self):
+        model = self.model("ucg-max.json")
+        same_text_evidence = self.fixture_runtime()["runtime-fixture-qualified"].copy()
+        same_text_evidence["id"] = "runtime-fixture-same-text"
+        same_text_evidence["supports"] = {"api_model": "Fixture API", "sysid": "Fixture API"}
+        self.runtime[same_text_evidence["id"]] = same_text_evidence
+        self.add_alias(model, "api_model", "Fixture API", evidence_id=same_text_evidence["id"])
+        self.add_alias(model, "sysid", "Fixture API", evidence_id=same_text_evidence["id"])
+        validate_model(model, self.official, self.runtime)
+        self.assertIs(resolve_model([model], "Fixture API", identifier_type="api_model"), model)
+        self.assertIs(resolve_model([model], "Fixture API", identifier_type="sysid"), model)
+        self.assertIsNone(resolve_model([model], "Fixture API", identifier_type="ssh_model"))
+
     def test_duplicate_verified_alias_fails(self):
         with tempfile.TemporaryDirectory() as temporary:
             temporary_root = Path(temporary) / "catalog"
@@ -93,6 +128,34 @@ class CatalogTests(unittest.TestCase):
                 path.write_text(json.dumps(model, indent=2) + "\n", encoding="utf-8")
             with self.assertRaisesRegex(CatalogError, "duplicate verified runtime alias"):
                 validate_catalog(temporary_root)
+
+    def test_duplicate_verified_alias_fails_for_each_identifier_type(self):
+        for identifier_type in ("api_model", "sysid", "ssh_model"):
+            with self.subTest(identifier_type=identifier_type):
+                with tempfile.TemporaryDirectory() as temporary:
+                    temporary_root = Path(temporary) / "catalog"
+                    shutil.copytree(ROOT, temporary_root)
+                    identifier_slug = identifier_type.replace("_", "-")
+                    value = "same-verified-" + identifier_slug
+                    kind = "qualified_ssh" if identifier_type == "ssh_model" else "qualified_controller"
+                    for filename, sku in (("ucg-max.json", "UCG-Max"), ("udw.json", "UDW")):
+                        evidence_id = "runtime-fixture-duplicate-" + identifier_slug + "-" + sku.lower()
+                        evidence = {
+                            "id": evidence_id,
+                            "kind": kind,
+                            "canonical_sku": sku,
+                            "supports": {identifier_type: value},
+                            "observed_on": "2026-08-31",
+                            "source_note": "Synthetic CI fixture; sanitized identity only.",
+                        }
+                        runtime_path = temporary_root / "evidence" / "runtime" / (evidence_id + ".json")
+                        runtime_path.write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
+                        path = temporary_root / "models" / filename
+                        model = json.loads(path.read_text(encoding="utf-8"))
+                        self.add_alias(model, identifier_type, value, evidence_id=evidence_id)
+                        path.write_text(json.dumps(model, indent=2) + "\n", encoding="utf-8")
+                    with self.assertRaisesRegex(CatalogError, "duplicate verified runtime alias"):
+                        validate_catalog(temporary_root)
 
     def test_duplicate_port_index_fails(self):
         model = self.model("usw-flex-mini.json")

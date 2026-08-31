@@ -117,9 +117,13 @@
         "usb-c"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
+        "api_model": [
+          "UCG Max"
+        ],
         "sysid": [],
-        "ssh_model": []
+        "ssh_model": [
+          "Qualcomm Technologies, Inc. IPQ5332/AP-MI03.1"
+        ]
       }
     },
     {
@@ -137,9 +141,15 @@
         "ac-mains"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
-        "sysid": [],
-        "ssh_model": []
+        "api_model": [
+          "UniFi Dream Wall"
+        ],
+        "sysid": [
+          "0xea2a"
+        ],
+        "ssh_model": [
+          "Annapurna Labs Alpine V2 UBNT"
+        ]
       }
     },
     {
@@ -289,7 +299,9 @@
         "usb-c"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
+        "api_model": [
+          "USW Flex Mini"
+        ],
         "sysid": [],
         "ssh_model": []
       }

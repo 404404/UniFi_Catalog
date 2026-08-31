@@ -1,0 +1,11 @@
+{
+  "id": "runtime-udw-controller-identity-20260831",
+  "kind": "qualified_controller",
+  "canonical_sku": "UDW",
+  "supports": {
+    "api_model": "UniFi Dream Wall",
+    "sysid": "0xea2a"
+  },
+  "observed_on": "2026-08-31",
+  "source_note": "Sanitized qualified controller identity observation; exact structured fields only, raw response omitted."
+}

@@ -16,9 +16,23 @@
     "official-ucg-max-techspecs-20260830"
   ],
   "runtime_identifiers": {
-    "api_model": [],
+    "api_model": [
+      {
+        "value": "UCG Max",
+        "status": "verified",
+        "provenance": "qualified_controller",
+        "evidence_id": "runtime-ucg-max-controller-identity-20260831"
+      }
+    ],
     "sysid": [],
-    "ssh_model": []
+    "ssh_model": [
+      {
+        "value": "Qualcomm Technologies, Inc. IPQ5332/AP-MI03.1",
+        "status": "verified",
+        "provenance": "qualified_ssh",
+        "evidence_id": "runtime-ucg-max-ssh-identity-20260831"
+      }
+    ]
   },
   "ports": {
     "complete": true,

@@ -1,0 +1,10 @@
+{
+  "id": "runtime-udw-ssh-identity-20260831",
+  "kind": "qualified_ssh",
+  "canonical_sku": "UDW",
+  "supports": {
+    "ssh_model": "Annapurna Labs Alpine V2 UBNT"
+  },
+  "observed_on": "2026-08-31",
+  "source_note": "Sanitized qualified SSH identity observation; exact model field only, raw transcript omitted."
+}

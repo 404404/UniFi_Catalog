@@ -1,0 +1,10 @@
+{
+  "id": "runtime-ucg-max-ssh-identity-20260831",
+  "kind": "qualified_ssh",
+  "canonical_sku": "UCG-Max",
+  "supports": {
+    "ssh_model": "Qualcomm Technologies, Inc. IPQ5332/AP-MI03.1"
+  },
+  "observed_on": "2026-08-31",
+  "source_note": "Sanitized qualified SSH identity observation; exact model field only, raw transcript omitted."
+}

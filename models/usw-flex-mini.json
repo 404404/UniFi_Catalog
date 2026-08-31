@@ -7,7 +7,14 @@
     "official-usw-flex-mini-techspecs-20260830"
   ],
   "runtime_identifiers": {
-    "api_model": [],
+    "api_model": [
+      {
+        "value": "USW Flex Mini",
+        "status": "verified",
+        "provenance": "qualified_controller",
+        "evidence_id": "runtime-usw-flex-mini-controller-identity-20260831"
+      }
+    ],
     "sysid": [],
     "ssh_model": []
   },

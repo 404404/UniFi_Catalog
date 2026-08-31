@@ -1,0 +1,10 @@
+{
+  "id": "runtime-usw-flex-mini-controller-identity-20260831",
+  "kind": "qualified_controller",
+  "canonical_sku": "USW-Flex-Mini",
+  "supports": {
+    "api_model": "USW Flex Mini"
+  },
+  "observed_on": "2026-08-31",
+  "source_note": "Sanitized qualified controller identity observation; exact model field only, raw model field omitted."
+}

@@ -1,0 +1,10 @@
+{
+  "id": "runtime-ucg-max-controller-identity-20260831",
+  "kind": "qualified_controller",
+  "canonical_sku": "UCG-Max",
+  "supports": {
+    "api_model": "UCG Max"
+  },
+  "observed_on": "2026-08-31",
+  "source_note": "Sanitized qualified controller identity observation; exact model field only, raw model field omitted."
+}

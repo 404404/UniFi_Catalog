@@ -16,9 +16,30 @@
     "official-udw-techspecs-20260830"
   ],
   "runtime_identifiers": {
-    "api_model": [],
-    "sysid": [],
-    "ssh_model": []
+    "api_model": [
+      {
+        "value": "UniFi Dream Wall",
+        "status": "verified",
+        "provenance": "qualified_controller",
+        "evidence_id": "runtime-udw-controller-identity-20260831"
+      }
+    ],
+    "sysid": [
+      {
+        "value": "0xea2a",
+        "status": "verified",
+        "provenance": "qualified_controller",
+        "evidence_id": "runtime-udw-controller-identity-20260831"
+      }
+    ],
+    "ssh_model": [
+      {
+        "value": "Annapurna Labs Alpine V2 UBNT",
+        "status": "verified",
+        "provenance": "qualified_ssh",
+        "evidence_id": "runtime-udw-ssh-identity-20260831"
+      }
+    ]
   },
   "ports": {
     "complete": true,
