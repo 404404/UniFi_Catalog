@@ -7,7 +7,12 @@
     "official-usw-flex-2-5g-8-poe-techspecs-20260830"
   ],
   "runtime_identifiers": {
-    "api_model": [],
+    "api_model": [{
+      "value": "USW Flex 2.5G 8 PoE",
+      "status": "verified",
+      "provenance": "qualified_controller",
+      "evidence_id": "runtime-usw-flex-2-5g-8-poe-controller-identity-20260831"
+    }],
     "sysid": [],
     "ssh_model": []
   },

@@ -7,7 +7,12 @@
     "official-us-xg-6poe-techspecs-20260830"
   ],
   "runtime_identifiers": {
-    "api_model": [],
+    "api_model": [{
+      "value": "US XG 6 PoE",
+      "status": "verified",
+      "provenance": "qualified_controller",
+      "evidence_id": "runtime-us-xg-6poe-controller-identity-20260831"
+    }],
     "sysid": [],
     "ssh_model": []
   },

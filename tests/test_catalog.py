@@ -90,6 +90,72 @@ class CatalogTests(unittest.TestCase):
                 model = self.model(filename)
                 self.assertIs(resolve_model([model], value, identifier_type=identifier_type), model)
 
+    def test_udw_poe_mapping_by_physical_index(self):
+        ports = {port["index"]: port for port in self.model("udw.json")["ports"]["items"]}
+        for index in range(1, 5):
+            self.assertEqual(
+                (ports[index]["poe_out"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (True, "poe", 15.4),
+            )
+        for index in range(5, 9):
+            self.assertEqual(
+                (ports[index]["poe_out"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (True, "poe+", 30),
+            )
+        for index in range(9, 13):
+            self.assertEqual(
+                (ports[index]["poe_out"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (True, "poe++", 60),
+            )
+        for index in range(13, 18):
+            self.assertEqual(
+                (ports[index]["poe_out"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (False, None, None),
+            )
+
+    def test_rs820_switch_aliases_resolve_to_exact_skus(self):
+        cases = (
+            ("USW Pro HD 24", "USW-Pro-HD-24"),
+            ("US XG 6 PoE", "US-XG-6POE"),
+            ("USW Flex 2.5G 8 PoE", "USW-Flex-2.5G-8-PoE"),
+            ("USW Flex", "USW-Flex"),
+            ("USW Pro Max 16 PoE", "USW-Pro-Max-16-PoE"),
+        )
+        for value, expected_sku in cases:
+            with self.subTest(value=value):
+                model = resolve_model(self.models, value, identifier_type="api_model")
+                self.assertIsNotNone(model)
+                self.assertEqual(model["canonical_sku"], expected_sku)
+
+    def test_rs820_near_match_aliases_remain_unresolved(self):
+        for value in ("USW Pro HD 24 PoE", "USW Flex 2.5G 8", "USW Pro Max 16"):
+            with self.subTest(value=value):
+                self.assertIsNone(resolve_model(self.models, value, identifier_type="api_model"))
+
+    def test_multi_switch_fixture_keeps_runtime_ownership_and_static_join(self):
+        fixture = json.loads((ROOT / "fixtures" / "rs820-multi-switch-site.json").read_text(encoding="utf-8"))
+        seen_keys = set()
+        total_runtime_ports = 0
+        for device in fixture["devices"]:
+            runtime_indices = device["runtime_port_indices"]
+            self.assertEqual(len(runtime_indices), len(set(runtime_indices)))
+            model = resolve_model(self.models, device["observed_api_model"], identifier_type="api_model")
+            expected_sku = device["expected_canonical_sku"]
+            if expected_sku is None:
+                self.assertIsNone(model)
+                self.assertIsNone(device["catalog_static_port_count"])
+            else:
+                self.assertIsNotNone(model)
+                self.assertEqual(model["canonical_sku"], expected_sku)
+                self.assertEqual(len(model["ports"]["items"]), device["catalog_static_port_count"])
+            for port_idx in runtime_indices:
+                self.assertNotIn((device["device_id"], port_idx), seen_keys)
+                seen_keys.add((device["device_id"], port_idx))
+            total_runtime_ports += len(runtime_indices)
+        self.assertGreater(total_runtime_ports, 64)
+        self.assertEqual(total_runtime_ports, fixture["site_port_count"])
+        self.assertEqual(len(seen_keys), total_runtime_ports)
+
     def test_ssh_alias_qualification_does_not_override_static_soc(self):
         model = self.model("ucg-max.json")
         processor_before = copy.deepcopy(model["processor"])

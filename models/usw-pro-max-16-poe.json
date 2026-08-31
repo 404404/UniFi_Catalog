@@ -7,7 +7,12 @@
     "official-usw-pro-max-16-poe-techspecs-20260830"
   ],
   "runtime_identifiers": {
-    "api_model": [],
+    "api_model": [{
+      "value": "USW Pro Max 16 PoE",
+      "status": "verified",
+      "provenance": "qualified_controller",
+      "evidence_id": "runtime-usw-pro-max-16-poe-controller-identity-20260831"
+    }],
     "sysid": [],
     "ssh_model": []
   },

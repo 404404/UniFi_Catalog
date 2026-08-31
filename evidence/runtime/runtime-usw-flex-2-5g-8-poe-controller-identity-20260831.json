@@ -1,0 +1,10 @@
+{
+  "id": "runtime-usw-flex-2-5g-8-poe-controller-identity-20260831",
+  "kind": "qualified_controller",
+  "canonical_sku": "USW-Flex-2.5G-8-PoE",
+  "supports": {
+    "api_model": "USW Flex 2.5G 8 PoE"
+  },
+  "observed_on": "2026-08-31",
+  "source_note": "Sanitized qualified RS820 controller identity observation; exact API model field only, raw model field and device identifiers omitted."
+}

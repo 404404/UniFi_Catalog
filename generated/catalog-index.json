@@ -167,7 +167,9 @@
         "dc-adapter"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
+        "api_model": [
+          "US XG 6 PoE"
+        ],
         "sysid": [],
         "ssh_model": []
       }
@@ -210,7 +212,9 @@
         "poe-plus-plus"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
+        "api_model": [
+          "USW Flex"
+        ],
         "sysid": [],
         "ssh_model": []
       }
@@ -278,7 +282,9 @@
         "poe-plus-plus-plus"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
+        "api_model": [
+          "USW Flex 2.5G 8 PoE"
+        ],
         "sysid": [],
         "ssh_model": []
       }
@@ -322,7 +328,9 @@
         "dc-backup"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
+        "api_model": [
+          "USW Pro HD 24"
+        ],
         "sysid": [],
         "ssh_model": []
       }
@@ -384,7 +392,9 @@
         "ac-adapter-210w"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
+        "api_model": [
+          "USW Pro Max 16 PoE"
+        ],
         "sysid": [],
         "ssh_model": []
       }

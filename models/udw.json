@@ -54,8 +54,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe++",
-        "poe_max_power_w": 60,
+        "poe_standard": "poe",
+        "poe_max_power_w": 15.4,
         "combo_group": null
       },
       {
@@ -68,8 +68,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe++",
-        "poe_max_power_w": 60,
+        "poe_standard": "poe",
+        "poe_max_power_w": 15.4,
         "combo_group": null
       },
       {
@@ -82,8 +82,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe++",
-        "poe_max_power_w": 60,
+        "poe_standard": "poe",
+        "poe_max_power_w": 15.4,
         "combo_group": null
       },
       {
@@ -96,8 +96,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe++",
-        "poe_max_power_w": 60,
+        "poe_standard": "poe",
+        "poe_max_power_w": 15.4,
         "combo_group": null
       },
       {
@@ -166,8 +166,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe",
-        "poe_max_power_w": 15.4,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
         "combo_group": null
       },
       {
@@ -180,8 +180,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe",
-        "poe_max_power_w": 15.4,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
         "combo_group": null
       },
       {
@@ -194,8 +194,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe",
-        "poe_max_power_w": 15.4,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
         "combo_group": null
       },
       {
@@ -208,8 +208,8 @@
         "max_speed_mbps": 1000,
         "poe_in": false,
         "poe_out": true,
-        "poe_standard": "poe",
-        "poe_max_power_w": 15.4,
+        "poe_standard": "poe++",
+        "poe_max_power_w": 60,
         "combo_group": null
       },
       {

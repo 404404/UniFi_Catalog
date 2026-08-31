@@ -1,0 +1,10 @@
+{
+  "id": "runtime-usw-pro-hd-24-controller-identity-20260831",
+  "kind": "qualified_controller",
+  "canonical_sku": "USW-Pro-HD-24",
+  "supports": {
+    "api_model": "USW Pro HD 24"
+  },
+  "observed_on": "2026-08-31",
+  "source_note": "Sanitized qualified RS820 controller identity observation; exact API model field only, raw payload and device identifiers omitted."
+}

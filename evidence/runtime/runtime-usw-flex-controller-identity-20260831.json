@@ -1,0 +1,10 @@
+{
+  "id": "runtime-usw-flex-controller-identity-20260831",
+  "kind": "qualified_controller",
+  "canonical_sku": "USW-Flex",
+  "supports": {
+    "api_model": "USW Flex"
+  },
+  "observed_on": "2026-08-31",
+  "source_note": "Sanitized qualified RS820 controller identity observation; exact API model field only, raw payload and device identifiers omitted."
+}
