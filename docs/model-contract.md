@@ -13,6 +13,10 @@ The contract separates:
   each explicitly `candidate` or `verified`;
 * runtime operational state: deliberately absent from this repository.
 
+Physical port labels are always neutral (`Port N`). Functional roles are typed
+in `ports.items[].roles`; `poe_in`, `poe_out` and `poe_passthrough` describe
+static capability and never runtime enabled/disabled state.
+
 `null` is an explicit unknown value. `complete=false` means research is
 incomplete; it does not mean the hardware capability is absent.
 

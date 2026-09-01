@@ -39,7 +39,7 @@ MODEL_REQUIRED = {
 MODEL_OPTIONAL = {"processor"}
 IDENTIFIER_TYPES = ("api_model", "sysid", "ssh_model")
 CONNECTORS = {"rj45", "sfp", "sfp_plus", "sfp28", "other"}
-ROLES = {"lan", "wan"}
+ROLES = {"lan", "wan", "downstream", "uplink", "data_in", "poe_passthrough"}
 SPEEDS = {10, 100, 1000, 2500, 5000, 10000, 25000, 100000}
 POE_STANDARDS = {"poe", "poe+", "poe++", "poe+++"}
 STORAGE_TYPES = {"emmc", "ssd", "sata_ssd", "nvme", "microsd", "tf", "other"}
@@ -61,6 +61,7 @@ POWER_FIELD_STATUSES = {"verified", "candidate", "unknown", "not_applicable"}
 POWER_PROFILE_FIELDS = ("selection_mode", "input_method", "input_poe_class", "input_capacity_w", "poe_budget_w")
 FAN_STATUS = {"present", "absent", "unknown"}
 RUNTIME_KINDS = {"qualified_controller", "qualified_ssh"}
+RUNTIME_CONTROLLER_OBSERVATION_KINDS = {"runtime_controller_observation"}
 STATIC_EVIDENCE_KINDS = {"qualified_runtime_static"}
 STATIC_FIELD_PATHS = {"processor.model"}
 CANONICAL_SKU_PATTERN = r"[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*"
@@ -110,7 +111,7 @@ def validate_official_evidence(evidence: dict[str, Any]) -> None:
 def validate_runtime_evidence(evidence: dict[str, Any]) -> None:
     _require(isinstance(evidence.get("id"), str) and re.fullmatch(r"runtime-[a-z0-9-]+", evidence["id"]), "runtime evidence: invalid id")
     kind = evidence.get("kind")
-    _require(kind in RUNTIME_KINDS | STATIC_EVIDENCE_KINDS, "runtime evidence: invalid kind")
+    _require(kind in RUNTIME_KINDS | RUNTIME_CONTROLLER_OBSERVATION_KINDS | STATIC_EVIDENCE_KINDS, "runtime evidence: invalid kind")
     _require(isinstance(evidence.get("canonical_sku"), str) and re.fullmatch(CANONICAL_SKU_PATTERN, evidence["canonical_sku"]), "runtime evidence: invalid canonical_sku")
     _require(isinstance(evidence.get("observed_on"), str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", evidence["observed_on"]), "runtime evidence: invalid date")
     if kind in RUNTIME_KINDS:
@@ -120,6 +121,11 @@ def validate_runtime_evidence(evidence: dict[str, Any]) -> None:
         allowed = {"api_model", "sysid"} if kind == "qualified_controller" else {"ssh_model"}
         _require(set(supports) <= allowed, f"runtime evidence {kind}: unsupported identifier type")
         _require(all(isinstance(value, str) and value for value in supports.values()), "runtime evidence.supports: invalid value")
+    elif kind in RUNTIME_CONTROLLER_OBSERVATION_KINDS:
+        _keys(evidence, {"id", "kind", "canonical_sku", "field_path", "observed_value", "source_class", "observed_on"}, {"source_note"}, "runtime controller observation")
+        _require(evidence["field_path"] == "power.controller_reported_poe_budget_w", "runtime controller observation: invalid field_path")
+        _number(evidence["observed_value"], "runtime controller observation.observed_value", nullable=False)
+        _require(evidence["source_class"] == "controller_api", "runtime controller observation: invalid source_class")
     else:
         _keys(evidence, {"id", "kind", "canonical_sku", "field_path", "observed_value", "source_class", "qualification_state", "observed_on"}, {"source_note"}, "qualified static evidence")
         _require(evidence["field_path"] in STATIC_FIELD_PATHS, f"qualified static evidence: field path is not allowed: {evidence['field_path']}")
@@ -128,6 +134,7 @@ def validate_runtime_evidence(evidence: dict[str, Any]) -> None:
         _require(evidence["observed_value"] is None or isinstance(evidence["observed_value"], (str, int, float, bool)), "qualified static evidence: observed_value must be scalar")
     source_note = evidence.get("source_note")
     _require(source_note is None or (isinstance(source_note, str) and source_note.strip()), "runtime evidence: invalid source_note")
+
 
 
 def _validate_processor(processor: Any, runtime_evidence: dict[str, dict[str, Any]], canonical_sku: str) -> None:
@@ -168,6 +175,11 @@ def _validate_ports(ports: Any) -> None:
         _require(isinstance(port["label"], str) and port["label"].strip(), f"{name}.label: invalid value")
         _require(port["connector"] in CONNECTORS, f"{name}.connector: invalid value")
         _require(isinstance(port["roles"], list) and port["roles"] and set(port["roles"]) <= ROLES, f"{name}.roles: invalid value")
+        roles = set(port["roles"])
+        if "poe_passthrough" in roles:
+            _require(port["poe_out"] is True, f"{name}: PoE passthrough role requires poe_out=true")
+        if "uplink" in roles:
+            _require("data_in" in roles, f"{name}: uplink role requires data_in role")
         speed = port["max_speed_mbps"]
         _require(speed is None or (isinstance(speed, int) and speed in SPEEDS), f"{name}.max_speed_mbps: invalid value")
         for direction in ("poe_in", "poe_out"):
@@ -230,6 +242,7 @@ def _validate_power_field_evidence(value: Any, field_evidence: Any, name: str, e
     evidence_ids = field_evidence["evidence_ids"]
     _require(isinstance(evidence_ids, list) and len(evidence_ids) == len(set(evidence_ids)), f"{name}.evidence_ids: invalid value")
     _require(all(isinstance(evidence_id, str) and evidence_id in evidence for evidence_id in evidence_ids), f"{name}.evidence_ids: unknown evidence reference")
+    _require(all(evidence[evidence_id]["kind"] not in RUNTIME_CONTROLLER_OBSERVATION_KINDS for evidence_id in evidence_ids), f"{name}.evidence_ids: dynamic runtime observations cannot qualify static capability")
     source_note = field_evidence.get("source_note")
     _require(source_note is None or (isinstance(source_note, str) and source_note.strip()), f"{name}.source_note: invalid value")
     _require(evidence_ids or source_note, f"{name}: evidence_ids or source_note required")

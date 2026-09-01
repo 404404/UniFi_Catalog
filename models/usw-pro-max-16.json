@@ -16,7 +16,7 @@
     "items": [
       {
         "index": 1,
-        "label": "RJ45-1",
+        "label": "Port 1",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -30,7 +30,7 @@
       },
       {
         "index": 2,
-        "label": "RJ45-2",
+        "label": "Port 2",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -44,7 +44,7 @@
       },
       {
         "index": 3,
-        "label": "RJ45-3",
+        "label": "Port 3",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -58,7 +58,7 @@
       },
       {
         "index": 4,
-        "label": "RJ45-4",
+        "label": "Port 4",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -72,7 +72,7 @@
       },
       {
         "index": 5,
-        "label": "RJ45-5",
+        "label": "Port 5",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -86,7 +86,7 @@
       },
       {
         "index": 6,
-        "label": "RJ45-6",
+        "label": "Port 6",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -100,7 +100,7 @@
       },
       {
         "index": 7,
-        "label": "RJ45-7",
+        "label": "Port 7",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -114,7 +114,7 @@
       },
       {
         "index": 8,
-        "label": "RJ45-8",
+        "label": "Port 8",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -128,7 +128,7 @@
       },
       {
         "index": 9,
-        "label": "RJ45-9",
+        "label": "Port 9",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -142,7 +142,7 @@
       },
       {
         "index": 10,
-        "label": "RJ45-10",
+        "label": "Port 10",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -156,7 +156,7 @@
       },
       {
         "index": 11,
-        "label": "RJ45-11",
+        "label": "Port 11",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -170,7 +170,7 @@
       },
       {
         "index": 12,
-        "label": "RJ45-12",
+        "label": "Port 12",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -184,7 +184,7 @@
       },
       {
         "index": 13,
-        "label": "RJ45-13",
+        "label": "Port 13",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -198,7 +198,7 @@
       },
       {
         "index": 14,
-        "label": "RJ45-14",
+        "label": "Port 14",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -212,7 +212,7 @@
       },
       {
         "index": 15,
-        "label": "RJ45-15",
+        "label": "Port 15",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -226,7 +226,7 @@
       },
       {
         "index": 16,
-        "label": "RJ45-16",
+        "label": "Port 16",
         "connector": "rj45",
         "roles": [
           "lan"
@@ -240,7 +240,7 @@
       },
       {
         "index": 17,
-        "label": "SFP+-1",
+        "label": "Port 17",
         "connector": "sfp_plus",
         "roles": [
           "lan"
@@ -254,7 +254,7 @@
       },
       {
         "index": 18,
-        "label": "SFP+-2",
+        "label": "Port 18",
         "connector": "sfp_plus",
         "roles": [
           "lan"

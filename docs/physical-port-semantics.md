@@ -4,6 +4,10 @@ Only physical Ethernet interfaces belong in `ports.items`. Wi-Fi radios are
 not ports. Every item has an integer physical index, connector, possible role,
 static maximum speed and explicit PoE fields.
 
+Port labels are neutral (`Port N`). Functional roles such as `downstream`,
+`uplink`, `data_in` and `poe_passthrough` are typed in `roles`; `poe_in` and
+`poe_out` describe static capability, not runtime enabled/disabled state.
+
 `ports.complete=true` means that the physical Ethernet interface set is fully
 enumerated. It does not permit inventing a missing per-port speed or PoE
 detail: those details remain `null` when the authoritative source does not

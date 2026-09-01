@@ -131,6 +131,73 @@ class CatalogTests(unittest.TestCase):
                 self.assertIsNotNone(model)
                 self.assertEqual(model["canonical_sku"], expected_sku)
 
+    def test_all_physical_port_labels_are_neutral(self):
+        for model in self.models:
+            with self.subTest(canonical_sku=model["canonical_sku"]):
+                self.assertEqual(
+                    [port["label"] for port in model["ports"]["items"]],
+                    [f"Port {port['index']}" for port in model["ports"]["items"]],
+                )
+
+    def test_in_wall_port_roles_and_poe_passthrough_are_typed(self):
+        for filename in ("u6-iw.json", "u6-enterprise-iw.json"):
+            ports = {port["index"]: port for port in self.model(filename)["ports"]["items"]}
+            self.assertEqual(ports[1]["connector"], "rj45")
+            self.assertTrue({"lan", "downstream", "poe_passthrough"} <= set(ports[1]["roles"]))
+            self.assertFalse(ports[1]["poe_in"])
+            self.assertTrue(ports[1]["poe_out"])
+            for index in range(2, 5):
+                self.assertTrue({"lan", "downstream"} <= set(ports[index]["roles"]))
+                self.assertFalse(ports[index]["poe_in"])
+                self.assertIsNone(ports[index]["poe_out"])
+            self.assertTrue({"lan", "uplink", "data_in"} <= set(ports[5]["roles"]))
+            self.assertTrue(ports[5]["poe_in"])
+            self.assertFalse(ports[5]["poe_out"])
+
+    def test_static_single_port_topology_survives_missing_runtime_port_observations(self):
+        for filename, sku in (("u6-mesh.json", "U6-Mesh"), ("uap-ac-m.json", "UAP-AC-M")):
+            model = resolve_model(self.models, sku, explicit_sku=True)
+            self.assertIsNotNone(model)
+            self.assertEqual(model["ports"]["items"], [{
+                "index": 1,
+                "label": "Port 1",
+                "connector": "rj45",
+                "roles": ["lan"],
+                "max_speed_mbps": 1000,
+                "poe_in": True,
+                "poe_out": False,
+                "poe_standard": "poe",
+                "poe_max_power_w": None,
+                "combo_group": None,
+            }])
+            runtime_observation = {"interfaces": {}}
+            self.assertNotIn("ports", runtime_observation["interfaces"])
+            self.assertEqual(len(model["ports"]["items"]), 1)
+
+    def test_xg_runtime_controller_budget_is_non_authoritative(self):
+        model = self.model("us-xg-6poe.json")
+        observation = self.runtime["runtime-us-xg-6poe-controller-poe-budget-20260901"]
+        self.assertEqual(observation["kind"], "runtime_controller_observation")
+        self.assertEqual(observation["canonical_sku"], "US-XG-6POE")
+        self.assertEqual(observation["field_path"], "power.controller_reported_poe_budget_w")
+        self.assertEqual(observation["observed_value"], 150)
+        self.assertEqual(model["power"]["absolute_max_poe_budget_w"], 170)
+        self.assertNotIn(observation["id"], model["official_evidence_ids"])
+        self.assertFalse(any(observation["id"] in field["evidence_ids"] for profile in model["power"]["power_profiles"] for field in profile["field_evidence"].values()))
+
+    def test_runtime_controller_observation_cannot_qualify_static_power_field(self):
+        model = self.model("us-xg-6poe.json")
+        field_evidence = model["power"]["power_profiles"][0]["field_evidence"]["poe_budget_w"]
+        field_evidence["evidence_ids"] = ["runtime-us-xg-6poe-controller-poe-budget-20260901"]
+        with self.assertRaisesRegex(CatalogError, "dynamic runtime observations cannot qualify static capability"):
+            validate_model(model, self.official, self.runtime)
+
+    def test_runtime_controller_observation_cannot_back_runtime_alias(self):
+        model = self.model("us-xg-6poe.json")
+        self.add_alias(model, "api_model", "controller-budget-observation", evidence_id="runtime-us-xg-6poe-controller-poe-budget-20260901")
+        with self.assertRaisesRegex(CatalogError, "aliases require qualified controller/SSH identity evidence"):
+            validate_model(model, self.official, self.runtime)
+
     def test_api_alias_resolution_is_independent_of_offline_runtime_state(self):
         model = resolve_model(self.models, "U6 Enterprise IW", identifier_type="api_model")
         self.assertIsNotNone(model)
@@ -283,6 +350,22 @@ class CatalogTests(unittest.TestCase):
             self.assertIsNone(profile["poe_budget_w"])
             self.assertEqual(profile["field_evidence"]["poe_budget_w"]["status"], "unknown")
             self.assertIsNone(power_profile_budget(profile))
+
+    def test_requested_poe_budgets_and_profiles_are_explicit(self):
+        self.assertEqual(self.model("us-xg-6poe.json")["power"]["absolute_max_poe_budget_w"], 170)
+        self.assertEqual(self.model("usw-pro-max-16-poe.json")["power"]["absolute_max_poe_budget_w"], 180)
+        flex_25 = self.model("usw-flex-2.5g-8-poe.json")
+        self.assertEqual(flex_25["power"]["absolute_max_poe_budget_w"], 196)
+        self.assertEqual(
+            {profile["id"]: profile["poe_budget_w"] for profile in flex_25["power"]["power_profiles"]},
+            {"poe-plus": 16, "poe-plus-plus": 46, "poe-plus-plus-plus": 76, "ac-adapter-210w": 196, "dc-60w": None, "dc-210w": None},
+        )
+        flex = self.model("usw-flex.json")
+        self.assertEqual(flex["power"]["absolute_max_poe_budget_w"], 46)
+        self.assertEqual(
+            {profile["id"]: profile["poe_budget_w"] for profile in flex["power"]["power_profiles"]},
+            {"poe": 8, "poe-plus": 20, "poe-plus-plus": 46, "poe-adapter-60w": 46},
+        )
 
     def test_power_profile_semantics_and_absolute_budget(self):
         model = self.model("usw-flex-2.5g-8-poe.json")

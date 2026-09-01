@@ -3,6 +3,7 @@
 This directory contains only sanitized, structured evidence:
 
 * qualified_controller observations may qualify api_model and sysid;
+* runtime_controller_observation records sanitized dynamic controller values and never qualify static model fields or resolver aliases;
 * qualified_ssh observations may qualify ssh_model;
 * qualified_runtime_static observations may qualify explicitly allowed model-fixed
   fields, currently processor.model.

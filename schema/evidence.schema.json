@@ -10,6 +10,9 @@
       "$ref": "#/$defs/runtime_observation"
     },
     {
+      "$ref": "#/$defs/runtime_controller_observation"
+    },
+    {
       "$ref": "#/$defs/qualified_runtime_static"
     }
   ],
@@ -138,6 +141,50 @@
         "canonical_sku": {
           "type": "string",
           "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"
+        }
+      }
+    },
+    "runtime_controller_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "canonical_sku",
+        "field_path",
+        "observed_value",
+        "source_class",
+        "observed_on"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^runtime-[a-z0-9-]+$"
+        },
+        "kind": {
+          "const": "runtime_controller_observation"
+        },
+        "canonical_sku": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"
+        },
+        "field_path": {
+          "const": "power.controller_reported_poe_budget_w"
+        },
+        "observed_value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "source_class": {
+          "const": "controller_api"
+        },
+        "observed_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "source_note": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },

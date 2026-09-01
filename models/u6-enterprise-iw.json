@@ -21,24 +21,27 @@
     "items": [
       {
         "index": 1,
-        "label": "2.5 GbE data-in",
+        "label": "Port 1",
         "connector": "rj45",
         "roles": [
-          "lan"
+          "lan",
+          "downstream",
+          "poe_passthrough"
         ],
         "max_speed_mbps": 2500,
-        "poe_in": true,
-        "poe_out": false,
+        "poe_in": false,
+        "poe_out": true,
         "poe_standard": null,
         "poe_max_power_w": null,
         "combo_group": null
       },
       {
         "index": 2,
-        "label": "GbE data-out-1",
+        "label": "Port 2",
         "connector": "rj45",
         "roles": [
-          "lan"
+          "lan",
+          "downstream"
         ],
         "max_speed_mbps": 1000,
         "poe_in": false,
@@ -49,10 +52,11 @@
       },
       {
         "index": 3,
-        "label": "GbE data-out-2",
+        "label": "Port 3",
         "connector": "rj45",
         "roles": [
-          "lan"
+          "lan",
+          "downstream"
         ],
         "max_speed_mbps": 1000,
         "poe_in": false,
@@ -63,10 +67,11 @@
       },
       {
         "index": 4,
-        "label": "GbE data-out-3",
+        "label": "Port 4",
         "connector": "rj45",
         "roles": [
-          "lan"
+          "lan",
+          "downstream"
         ],
         "max_speed_mbps": 1000,
         "poe_in": false,
@@ -77,14 +82,16 @@
       },
       {
         "index": 5,
-        "label": "GbE data-out-4",
+        "label": "Port 5",
         "connector": "rj45",
         "roles": [
-          "lan"
+          "lan",
+          "uplink",
+          "data_in"
         ],
         "max_speed_mbps": 1000,
-        "poe_in": false,
-        "poe_out": null,
+        "poe_in": true,
+        "poe_out": false,
         "poe_standard": null,
         "poe_max_power_w": null,
         "combo_group": null

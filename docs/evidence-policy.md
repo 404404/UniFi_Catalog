@@ -5,7 +5,7 @@ product pages, official datasheets and official archived documentation.
 Community pages and third-party databases may help discovery but cannot
 establish an authoritative static fact or a verified runtime matcher.
 
-Runtime identity aliases need sanitized qualified controller or SSH observations.
+Runtime identity aliases need sanitized qualified controller or SSH observations. Dynamic controller observations use runtime_controller_observation and never qualify static model fields or resolver aliases.
 Keep only identifier type, observed value, canonical SKU, qualified source class
 and observation date. qualified_controller may prove only api_model and sysid;
 qualified_ssh may prove only ssh_model. An alias evidence value must equal the

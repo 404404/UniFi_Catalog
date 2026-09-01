@@ -317,7 +317,11 @@
           "items": {
             "enum": [
               "lan",
-              "wan"
+              "wan",
+              "downstream",
+              "uplink",
+              "data_in",
+              "poe_passthrough"
             ]
           },
           "minItems": 1,

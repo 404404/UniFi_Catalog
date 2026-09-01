@@ -21,7 +21,7 @@
     "items": [
       {
         "index": 1,
-        "label": "GbE uplink",
+        "label": "Port 1",
         "connector": "rj45",
         "roles": [
           "lan"
