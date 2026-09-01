@@ -1,10 +1,10 @@
 {
-  "id": "runtime-usw-pro-hd-24-controller-identity-20260831",
+  "id": "runtime-ac-mesh-controller-identity-20260901",
   "kind": "qualified_controller",
-  "canonical_sku": "USW-Pro-HD-24",
+  "canonical_sku": "UAP-AC-M",
   "supports": {
-    "api_model": "USW Pro HD 24"
+    "api_model": "AC Mesh"
   },
-  "observed_on": "2026-08-31",
+  "observed_on": "2026-09-01",
   "source_note": "Sanitized qualified Controller API identity observation; primary devices.data[].model field, confirmed by device detail.model across repeated stable list/detail observations; exact api_model only, raw payload and device identifiers omitted."
 }

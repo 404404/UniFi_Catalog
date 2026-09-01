@@ -6,5 +6,5 @@
     "api_model": "USW Flex 2.5G 8 PoE"
   },
   "observed_on": "2026-08-31",
-  "source_note": "Sanitized qualified RS820 controller identity observation; exact API model field only, raw model field and device identifiers omitted."
+  "source_note": "Sanitized qualified Controller API identity observation; primary devices.data[].model field, confirmed by device detail.model across repeated stable list/detail observations; exact api_model only, raw payload and device identifiers omitted."
 }

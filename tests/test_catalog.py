@@ -113,8 +113,12 @@ class CatalogTests(unittest.TestCase):
                 (False, None, None),
             )
 
-    def test_rs820_switch_aliases_resolve_to_exact_skus(self):
+    def test_qualified_api_aliases_resolve_to_exact_skus(self):
         cases = (
+            ("U6 Mesh", "U6-Mesh"),
+            ("U6 IW", "U6-IW"),
+            ("AC Mesh", "UAP-AC-M"),
+            ("U6 Enterprise IW", "U6-Enterprise-IW"),
             ("USW Pro HD 24", "USW-Pro-HD-24"),
             ("US XG 6 PoE", "US-XG-6POE"),
             ("USW Flex 2.5G 8 PoE", "USW-Flex-2.5G-8-PoE"),
@@ -126,6 +130,15 @@ class CatalogTests(unittest.TestCase):
                 model = resolve_model(self.models, value, identifier_type="api_model")
                 self.assertIsNotNone(model)
                 self.assertEqual(model["canonical_sku"], expected_sku)
+
+    def test_api_alias_resolution_is_independent_of_offline_runtime_state(self):
+        model = resolve_model(self.models, "U6 Enterprise IW", identifier_type="api_model")
+        self.assertIsNotNone(model)
+        offline_runtime = {"online": False, "api_status": "offline"}
+        self.assertFalse(offline_runtime["online"])
+        self.assertEqual(model["canonical_sku"], "U6-Enterprise-IW")
+        self.assertTrue(model["ports"]["complete"])
+        self.assertGreater(len(model["ports"]["items"]), 0)
 
     def test_rs820_near_match_aliases_remain_unresolved(self):
         for value in ("USW Pro HD 24 PoE", "USW Flex 2.5G 8", "USW Pro Max 16"):

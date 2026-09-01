@@ -6,10 +6,10 @@ Only exact controller values with verified evidence are resolver inputs.
 
 | Product | Official SKU | API model | sysid | SSH Model | API == SKU? | SSH == SKU? | Qualification status | Evidence |
 |---|---|---|---|---|---|---|---|---|
-| U6 Enterprise In-Wall | U6-Enterprise-IW | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | No qualified observation |
-| U6 In-Wall | U6-IW | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | No qualified observation |
-| U6 Mesh | U6-Mesh | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | No qualified observation |
-| AC Mesh | UAP-AC-M | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | No qualified observation |
+| U6 Enterprise In-Wall | U6-Enterprise-IW | U6 Enterprise IW | UNKNOWN | UNKNOWN | NO | UNKNOWN | VERIFIED | runtime-u6-enterprise-iw-controller-identity-20260901 |
+| U6 In-Wall | U6-IW | U6 IW | UNKNOWN | UNKNOWN | NO | UNKNOWN | VERIFIED | runtime-u6-iw-controller-identity-20260901 |
+| U6 Mesh | U6-Mesh | U6 Mesh | UNKNOWN | UNKNOWN | NO | UNKNOWN | VERIFIED | runtime-u6-mesh-controller-identity-20260901 |
+| AC Mesh | UAP-AC-M | AC Mesh | UNKNOWN | UNKNOWN | NO | UNKNOWN | VERIFIED | runtime-ac-mesh-controller-identity-20260901 |
 | In-Wall HD | UAP-IW-HD | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN | No qualified observation |
 | Cloud Gateway Max | UCG-Max | UCG Max | UNKNOWN | Qualcomm Technologies, Inc. IPQ5332/AP-MI03.1 | NO | UNKNOWN | VERIFIED | runtime-ucg-max-controller-identity-20260831; runtime-ucg-max-ssh-identity-20260831 |
 | Dream Wall | UDW | UniFi Dream Wall | 0xea2a | Annapurna Labs Alpine V2 UBNT | NO | NO | VERIFIED | runtime-udw-controller-identity-20260831; runtime-udw-ssh-identity-20260831 |

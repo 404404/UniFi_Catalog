@@ -7,7 +7,12 @@
     "official-u6-iw-techspecs-20260830"
   ],
   "runtime_identifiers": {
-    "api_model": [],
+    "api_model": [{
+      "value": "U6 IW",
+      "status": "verified",
+      "provenance": "qualified_controller",
+      "evidence_id": "runtime-u6-iw-controller-identity-20260901"
+    }],
     "sysid": [],
     "ssh_model": []
   },
