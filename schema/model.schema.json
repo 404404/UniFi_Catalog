@@ -324,7 +324,7 @@
               "poe_passthrough"
             ]
           },
-          "minItems": 1,
+          "minItems": 0,
           "uniqueItems": true
         },
         "max_speed_mbps": {

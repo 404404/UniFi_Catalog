@@ -174,7 +174,7 @@ def _validate_ports(ports: Any) -> None:
         indexes.add(port["index"])
         _require(isinstance(port["label"], str) and port["label"].strip(), f"{name}.label: invalid value")
         _require(port["connector"] in CONNECTORS, f"{name}.connector: invalid value")
-        _require(isinstance(port["roles"], list) and port["roles"] and set(port["roles"]) <= ROLES, f"{name}.roles: invalid value")
+        _require(isinstance(port["roles"], list) and set(port["roles"]) <= ROLES, f"{name}.roles: invalid value")
         roles = set(port["roles"])
         if "poe_passthrough" in roles:
             _require(port["poe_out"] is True, f"{name}: PoE passthrough role requires poe_out=true")
@@ -195,6 +195,8 @@ def _validate_ports(ports: Any) -> None:
             combo_members.setdefault(group, []).append(port["index"])
     for group, members in combo_members.items():
         _require(len(members) >= 2, f"combo group {group!r} must have at least two members")
+    if ports["complete"] and indexes:
+        _require(sorted(indexes) == list(range(1, len(indexes) + 1)), "complete physical ports must be contiguous from index 1")
 
 
 def classify_poe_output(model: dict[str, Any]) -> str:

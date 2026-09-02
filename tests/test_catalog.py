@@ -90,6 +90,24 @@ class CatalogTests(unittest.TestCase):
                 model = self.model(filename)
                 self.assertIs(resolve_model([model], value, identifier_type=identifier_type), model)
 
+    def test_udw_physical_port_topology_and_unknown_roles_are_explicit(self):
+        model = self.model("udw.json")
+        ports = {port["index"]: port for port in model["ports"]["items"]}
+        self.assertEqual(len(ports), 20)
+        self.assertEqual(sorted(ports), list(range(1, 21)))
+        for index in range(1, 17):
+            self.assertEqual((ports[index]["label"], ports[index]["connector"], ports[index]["max_speed_mbps"]), (f"Port {index}", "rj45", 1000))
+        self.assertEqual((ports[17]["connector"], ports[17]["max_speed_mbps"]), ("sfp_plus", 10000))
+        self.assertEqual((ports[18]["connector"], ports[18]["max_speed_mbps"]), ("rj45", 1000))
+        self.assertEqual((ports[19]["connector"], ports[19]["max_speed_mbps"]), ("rj45", 2500))
+        self.assertEqual((ports[20]["connector"], ports[20]["max_speed_mbps"]), ("sfp_plus", 10000))
+        for index in range(17, 21):
+            self.assertEqual(ports[index]["roles"], [])
+            self.assertIsNone(ports[index]["poe_in"])
+            self.assertIsNone(ports[index]["poe_out"])
+            self.assertIsNone(ports[index]["poe_standard"])
+            self.assertIsNone(ports[index]["poe_max_power_w"])
+
     def test_udw_poe_mapping_by_physical_index(self):
         ports = {port["index"]: port for port in self.model("udw.json")["ports"]["items"]}
         for index in range(1, 5):
@@ -107,7 +125,7 @@ class CatalogTests(unittest.TestCase):
                 (ports[index]["poe_out"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
                 (True, "poe++", 60),
             )
-        for index in range(13, 18):
+        for index in range(13, 17):
             self.assertEqual(
                 (ports[index]["poe_out"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
                 (False, None, None),
