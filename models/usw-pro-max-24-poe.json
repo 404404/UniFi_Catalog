@@ -25,7 +25,7 @@
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_max_power_w": 30,
         "combo_group": null
       },
       {
@@ -39,7 +39,7 @@
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_max_power_w": 30,
         "combo_group": null
       },
       {
@@ -53,7 +53,7 @@
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_max_power_w": 30,
         "combo_group": null
       },
       {
@@ -67,7 +67,7 @@
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_max_power_w": 30,
         "combo_group": null
       },
       {
@@ -81,7 +81,7 @@
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_max_power_w": 30,
         "combo_group": null
       },
       {
@@ -95,7 +95,7 @@
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_max_power_w": 30,
         "combo_group": null
       },
       {
@@ -109,7 +109,7 @@
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_max_power_w": 30,
         "combo_group": null
       },
       {
@@ -123,7 +123,7 @@
         "poe_in": false,
         "poe_out": true,
         "poe_standard": "poe+",
-        "poe_max_power_w": 32,
+        "poe_max_power_w": 30,
         "combo_group": null
       },
       {

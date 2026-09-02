@@ -397,6 +397,69 @@ class CatalogTests(unittest.TestCase):
             {"poe": 8, "poe-plus": 20, "poe-plus-plus": 46, "poe-adapter-60w": 46},
         )
 
+    def test_all_output_poe_class_wattages_are_normalized(self):
+        expected = {"poe": 15.4, "poe+": 30, "poe++": 60, "poe+++": 90}
+        output_count = 0
+        for model in self.models:
+            for port in model["ports"]["items"]:
+                if port["poe_out"] is True and port["poe_standard"] is not None:
+                    output_count += 1
+                    self.assertEqual(port["poe_max_power_w"], expected[port["poe_standard"]])
+        self.assertGreater(output_count, 0)
+
+    def test_invalid_normalized_output_wattages_are_rejected(self):
+        for filename, invalid in (("usw-flex.json", 25), ("usw-pro-max-16-poe.json", 32), ("usw-flex-2.5g-8-poe.json", 64)):
+            model = self.model(filename)
+            port = next(port for port in model["ports"]["items"] if port["poe_out"] is True and port["poe_standard"] is not None)
+            port["poe_max_power_w"] = invalid
+            with self.subTest(filename=filename, invalid=invalid):
+                with self.assertRaisesRegex(CatalogError, "does not match normalized"):
+                    validate_model(model, self.official, self.runtime)
+        model = self.model("usw-flex-2.5g-8-poe.json")
+        port = next(port for port in model["ports"]["items"] if port["poe_standard"] == "poe++" and port["poe_out"] is True)
+        port["poe_max_power_w"] = 64
+        with self.assertRaisesRegex(CatalogError, "does not match normalized"):
+            validate_model(model, self.official, self.runtime)
+        model = self.model("usw-pro-hd-24-poe.json")
+        port = next(port for port in model["ports"]["items"] if port["poe_standard"] == "poe++" and port["poe_out"] is True)
+        port["poe_standard"] = "poe+++"
+        port["poe_max_power_w"] = 95
+        with self.assertRaisesRegex(CatalogError, "does not match normalized"):
+            validate_model(model, self.official, self.runtime)
+
+    def test_known_poe_model_regressions_and_device_budgets(self):
+        expected_ports = {
+            "udw.json": {("poe", 15.4), ("poe+", 30), ("poe++", 60)},
+            "us-xg-6poe.json": {("poe++", 60)},
+            "usw-enterprise-8-poe.json": {("poe+", 30)},
+            "usw-flex.json": {("poe+", 30)},
+            "usw-flex-2.5g-8-poe.json": {("poe++", 60)},
+            "usw-pro-hd-24-poe.json": {("poe++", 60)},
+            "usw-pro-max-16-poe.json": {("poe+", 30), ("poe++", 60)},
+            "usw-pro-max-24-poe.json": {("poe+", 30), ("poe++", 60)},
+        }
+        expected_budgets = {
+            "udw.json": 420,
+            "us-xg-6poe.json": 170,
+            "usw-enterprise-8-poe.json": 120,
+            "usw-flex.json": 46,
+            "usw-flex-2.5g-8-poe.json": 196,
+            "usw-pro-hd-24-poe.json": 600,
+            "usw-pro-max-16-poe.json": 180,
+            "usw-pro-max-24-poe.json": 400,
+        }
+        for filename, expected in expected_ports.items():
+            model = self.model(filename)
+            actual = {(port["poe_standard"], port["poe_max_power_w"]) for port in model["ports"]["items"] if port["poe_out"] is True and port["poe_standard"] is not None}
+            self.assertEqual(actual, expected)
+            self.assertEqual(model["power"]["absolute_max_poe_budget_w"], expected_budgets[filename])
+
+    def test_input_only_poe_ports_keep_output_wattage_unknown(self):
+        for model in self.models:
+            for port in model["ports"]["items"]:
+                if port["poe_in"] is True and port["poe_out"] is False:
+                    self.assertIsNone(port["poe_max_power_w"])
+
     def test_power_profile_semantics_and_absolute_budget(self):
         model = self.model("usw-flex-2.5g-8-poe.json")
         profiles = model["power"]["power_profiles"]

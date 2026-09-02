@@ -18,6 +18,13 @@ in `ports.items[].roles`; an empty roles array means no functional role is
 qualified. `poe_in`, `poe_out` and `poe_passthrough` describe static capability
 and never runtime enabled/disabled state.
 
+For output ports, `poe_standard` is the normalized IEEE-style PoE class and
+`poe_max_power_w` is its normalized nominal PSE output maximum: PoE 15.4 W,
+PoE+ 30 W, PoE++ 60 W and PoE+++ 90 W. Input-only ports may keep
+`poe_max_power_w=null`; that field is output power, not input class capacity.
+`power.absolute_max_poe_budget_w` is the whole-device maximum available PoE
+budget and must not be replaced by `sum(port.poe_max_power_w)`.
+
 `null` is an explicit unknown value. `complete=false` means research is
 incomplete; it does not mean the hardware capability is absent.
 

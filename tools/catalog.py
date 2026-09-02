@@ -42,6 +42,7 @@ CONNECTORS = {"rj45", "sfp", "sfp_plus", "sfp28", "qsfp28", "other"}
 ROLES = {"lan", "wan", "downstream", "uplink", "data_in", "poe_passthrough"}
 SPEEDS = {10, 100, 1000, 2500, 5000, 10000, 25000, 100000}
 POE_STANDARDS = {"poe", "poe+", "poe++", "poe+++"}
+POE_STANDARD_MAX_POWER_W = {"poe": 15.4, "poe+": 30, "poe++": 60, "poe+++": 90}
 STORAGE_TYPES = {"emmc", "ssd", "sata_ssd", "nvme", "microsd", "tf", "other"}
 STORAGE_KINDS = {"fixed_device", "user_slot", "removable_media"}
 PRESENCE = {"present", "not_populated", "unknown"}
@@ -187,6 +188,9 @@ def _validate_ports(ports: Any) -> None:
         standard = port["poe_standard"]
         _require(standard is None or standard in POE_STANDARDS, f"{name}.poe_standard: invalid value")
         _number(port["poe_max_power_w"], f"{name}.poe_max_power_w")
+        if port["poe_out"] is True and standard is not None:
+            expected_power = POE_STANDARD_MAX_POWER_W[standard]
+            _require(port["poe_max_power_w"] == expected_power, f"{name}.poe_max_power_w does not match normalized {standard} maximum {expected_power}")
         if port["poe_out"] is False:
             _require(port["poe_max_power_w"] is None, f"{name}: non-output port cannot have output wattage")
         group = port["combo_group"]

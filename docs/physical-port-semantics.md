@@ -7,7 +7,10 @@ static maximum speed and explicit PoE fields.
 Port labels are neutral (`Port N`). Functional roles such as `downstream`,
 `uplink`, `data_in` and `poe_passthrough` are typed in `roles`; an empty
 `roles` array means no functional role is qualified. `poe_in` and `poe_out`
-describe static capability, not runtime enabled/disabled state.
+describe static capability, not runtime enabled/disabled state. For output ports,
+`poe_standard` is the normalized IEEE-style class and `poe_max_power_w` is the
+normalized nominal PSE maximum for that class: 15.4/30/60/90 W for
+PoE/PoE+/PoE++/PoE+++. Input-only ports may retain a null output wattage.
 
 `ports.complete=true` means that the physical Ethernet interface set is fully
 enumerated. It does not permit inventing a missing per-port speed or PoE
