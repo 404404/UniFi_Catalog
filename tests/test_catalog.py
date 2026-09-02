@@ -108,6 +108,18 @@ class CatalogTests(unittest.TestCase):
             self.assertIsNone(ports[index]["poe_standard"])
             self.assertIsNone(ports[index]["poe_max_power_w"])
 
+    def test_flex_25g_input_port_is_catalog_qualified(self):
+        ports = {port["index"]: port for port in self.model("usw-flex-2.5g-8.json")["ports"]["items"]}
+        self.assertFalse(ports[1]["poe_in"])
+        self.assertTrue(ports[9]["poe_in"])
+        self.assertEqual(ports[9]["poe_standard"], "poe+")
+        self.assertFalse(ports[9]["poe_out"])
+
+    def test_qsfp28_connector_is_supported_by_schema_and_semantics(self):
+        model = self.model("usw-flex-2.5g-8.json")
+        model["ports"]["items"][0]["connector"] = "qsfp28"
+        validate_model(model, self.official, self.runtime)
+
     def test_udw_poe_mapping_by_physical_index(self):
         ports = {port["index"]: port for port in self.model("udw.json")["ports"]["items"]}
         for index in range(1, 5):

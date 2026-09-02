@@ -16,6 +16,7 @@
     "display_name",
     "ports.topology",
     "ports.max_speed_mbps",
+    "ports.poe_in",
     "ports.poe_out",
     "power",
     "power_profiles",

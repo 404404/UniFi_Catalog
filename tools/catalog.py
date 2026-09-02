@@ -38,7 +38,7 @@ MODEL_REQUIRED = {
 }
 MODEL_OPTIONAL = {"processor"}
 IDENTIFIER_TYPES = ("api_model", "sysid", "ssh_model")
-CONNECTORS = {"rj45", "sfp", "sfp_plus", "sfp28", "other"}
+CONNECTORS = {"rj45", "sfp", "sfp_plus", "sfp28", "qsfp28", "other"}
 ROLES = {"lan", "wan", "downstream", "uplink", "data_in", "poe_passthrough"}
 SPEEDS = {10, 100, 1000, 2500, 5000, 10000, 25000, 100000}
 POE_STANDARDS = {"poe", "poe+", "poe++", "poe+++"}

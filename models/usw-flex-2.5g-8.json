@@ -134,9 +134,9 @@
           "lan"
         ],
         "max_speed_mbps": 10000,
-        "poe_in": false,
+        "poe_in": true,
         "poe_out": false,
-        "poe_standard": null,
+        "poe_standard": "poe+",
         "poe_max_power_w": null,
         "combo_group": null
       },

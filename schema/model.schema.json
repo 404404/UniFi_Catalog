@@ -309,6 +309,7 @@
             "sfp",
             "sfp_plus",
             "sfp28",
+            "qsfp28",
             "other"
           ]
         },
