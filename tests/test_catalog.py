@@ -352,6 +352,11 @@ class CatalogTests(unittest.TestCase):
         incomplete["ports"]["complete"] = False
         self.assertEqual(classify_poe_output(incomplete), "unknown")
 
+    def test_u6_enterprise_iw_port_speeds_match_official_topology(self):
+        model = self.model("u6-enterprise-iw.json")
+        ports = {port["index"]: port["max_speed_mbps"] for port in model["ports"]["items"]}
+        self.assertEqual(ports, {1: 1000, 2: 1000, 3: 1000, 4: 1000, 5: 2500})
+
     def test_max_speed_is_static_model_data(self):
         model = self.model("usw-flex-2.5g-5.json")
         self.assertEqual({port["max_speed_mbps"] for port in model["ports"]["items"]}, {2500})
