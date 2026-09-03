@@ -24,7 +24,9 @@
         "label": "Port 1",
         "connector": "rj45",
         "roles": [
-          "lan"
+          "lan",
+          "uplink",
+          "data_in"
         ],
         "max_speed_mbps": 1000,
         "poe_in": true,

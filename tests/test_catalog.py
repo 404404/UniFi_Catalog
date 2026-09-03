@@ -192,7 +192,7 @@ class CatalogTests(unittest.TestCase):
                 "index": 1,
                 "label": "Port 1",
                 "connector": "rj45",
-                "roles": ["lan"],
+                "roles": ["lan", "uplink", "data_in"],
                 "max_speed_mbps": 1000,
                 "poe_in": True,
                 "poe_out": False,
@@ -203,6 +203,7 @@ class CatalogTests(unittest.TestCase):
             runtime_observation = {"interfaces": {}}
             self.assertNotIn("ports", runtime_observation["interfaces"])
             self.assertEqual(len(model["ports"]["items"]), 1)
+            self.assertTrue({"lan", "uplink", "data_in"} <= set(model["ports"]["items"][0]["roles"]))
 
     def test_xg_runtime_controller_budget_is_non_authoritative(self):
         model = self.model("us-xg-6poe.json")
