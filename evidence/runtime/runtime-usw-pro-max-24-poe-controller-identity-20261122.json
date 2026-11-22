@@ -1,0 +1,10 @@
+{
+  "id": "runtime-usw-pro-max-24-poe-controller-identity-20261122",
+  "kind": "qualified_controller",
+  "canonical_sku": "USW-Pro-Max-24-PoE",
+  "supports": {
+    "api_model": "USW Pro Max 24 PoE"
+  },
+  "observed_on": "2026-11-22",
+  "source_note": "Read-only GK50 Server stats projection observed a current available UniFi API inventory from a ucg-max profile: API last_success 2026-11-22T13:47:54Z, Client revision 11e2ed3a266a0eeaffc53184427a80aaaab24d67, and exact model resolver input USW Pro Max 24 PoE with model_profile_status unknown before this qualification. The normalized device descriptor copies its model value from API model/model_name/modelName/device_model fields and keeps device display name separate. Two inventory views shared the same one-way SHA-256 device-id fingerprint; raw identifiers and response bodies were not retained. sysid, SSH model, firmware, and API device type were not exposed by this sanitized projection."
+}

@@ -161,6 +161,46 @@ class CatalogTests(unittest.TestCase):
                 self.assertIsNotNone(model)
                 self.assertEqual(model["canonical_sku"], expected_sku)
 
+    def test_pro_max_24_poe_live_api_identity_resolves_exact_static_capabilities(self):
+        model = resolve_model(
+            self.models,
+            "USW Pro Max 24 PoE",
+            identifier_type="api_model",
+        )
+        self.assertIsNotNone(model)
+        self.assertEqual(model["canonical_sku"], "USW-Pro-Max-24-PoE")
+        self.assertEqual(len(model["ports"]["items"]), 26)
+        ports = {port["index"]: port for port in model["ports"]["items"]}
+        for index in range(1, 9):
+            self.assertEqual(
+                (ports[index]["max_speed_mbps"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (1000, "poe+", 30),
+            )
+        for index in range(9, 17):
+            self.assertEqual(
+                (ports[index]["max_speed_mbps"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (1000, "poe++", 60),
+            )
+        for index in range(17, 25):
+            self.assertEqual(
+                (ports[index]["max_speed_mbps"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (2500, "poe++", 60),
+            )
+        for index in (25, 26):
+            self.assertEqual((ports[index]["max_speed_mbps"], ports[index]["connector"], ports[index]["poe_out"]), (10000, "sfp_plus", False))
+
+        power = model["power"]
+        self.assertEqual(power["absolute_max_poe_budget_w"], 400)
+        self.assertEqual(power["max_device_consumption_w"], 450)
+        ac_profile = next(profile for profile in power["power_profiles"] if profile["id"] == "ac-mains")
+        self.assertEqual((ac_profile["input_capacity_w"], ac_profile["poe_budget_w"]), (550, 400))
+        dc_profile = next(profile for profile in power["power_profiles"] if profile["id"] == "dc-backup")
+        self.assertEqual((dc_profile["input_capacity_w"], dc_profile["poe_budget_w"]), (None, None))
+
+    def test_pro_max_24_non_poe_or_marketing_name_cannot_use_poe_alias(self):
+        self.assertIsNone(resolve_model(self.models, "USW Pro Max 24", identifier_type="api_model"))
+        self.assertIsNone(resolve_model(self.models, "Pro Max 24 PoE", identifier_type="api_model"))
+
     def test_all_physical_port_labels_are_neutral(self):
         for model in self.models:
             with self.subTest(canonical_sku=model["canonical_sku"]):

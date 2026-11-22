@@ -444,7 +444,9 @@
         "dc-backup"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
+        "api_model": [
+          "USW Pro Max 24 PoE"
+        ],
         "sysid": [],
         "ssh_model": []
       }
