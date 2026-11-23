@@ -42,7 +42,7 @@ def main() -> int:
             raise CatalogError(f"bundle schema validation failed: {exc}") from exc
         digest = catalog_sha256(catalog_bytes)
         (output_dir / "catalog.sha256").write_text(digest + "  catalog.json\n", encoding="utf-8")
-        manifest = {"catalog_schema_version": 1, "model_count": len(models), "bundle_sha256": digest}
+        manifest = {"catalog_schema_version": 2, "model_count": len(models), "bundle_sha256": digest}
         (output_dir / "manifest.json").write_bytes(canonical_json(manifest))
     except CatalogError as exc:
         print(f"DETERMINISTIC_BUILD=FAIL: {exc}")

@@ -38,6 +38,7 @@ MODEL_REQUIRED = {
 }
 MODEL_OPTIONAL = {"processor"}
 IDENTIFIER_TYPES = ("api_model", "sysid", "ssh_model")
+IDENTIFIER_TYPES_V2 = ("api_model", "legacy_model", "sysid", "ssh_model")
 CONNECTORS = {"rj45", "sfp", "sfp_plus", "sfp28", "qsfp28", "other"}
 ROLES = {"lan", "wan", "downstream", "uplink", "data_in", "poe_passthrough"}
 SPEEDS = {10, 100, 1000, 2500, 5000, 10000, 25000, 100000}
@@ -118,8 +119,8 @@ def validate_runtime_evidence(evidence: dict[str, Any]) -> None:
     if kind in RUNTIME_KINDS:
         _keys(evidence, {"id", "kind", "canonical_sku", "supports", "observed_on"}, {"source_note"}, "runtime identity evidence")
         supports = _object(evidence["supports"], "runtime evidence.supports")
-        _require(set(supports) <= set(IDENTIFIER_TYPES) and supports, "runtime evidence.supports: invalid fields")
-        allowed = {"api_model", "sysid"} if kind == "qualified_controller" else {"ssh_model"}
+        _require(set(supports) <= set(IDENTIFIER_TYPES_V2) and supports, "runtime evidence.supports: invalid fields")
+        allowed = {"api_model", "legacy_model", "sysid"} if kind == "qualified_controller" else {"ssh_model"}
         _require(set(supports) <= allowed, f"runtime evidence {kind}: unsupported identifier type")
         _require(all(isinstance(value, str) and value for value in supports.values()), "runtime evidence.supports: invalid value")
     elif kind in RUNTIME_CONTROLLER_OBSERVATION_KINDS:
@@ -337,11 +338,11 @@ def _validate_fans(fans: Any) -> None:
         _require(count is None, "unknown fans require count=null")
 
 
-def _validate_runtime_identifiers(value: Any, runtime_evidence: dict[str, dict[str, Any]], canonical_sku: str) -> list[tuple[str, str, str]]:
+def _validate_runtime_identifiers(value: Any, runtime_evidence: dict[str, dict[str, Any]], canonical_sku: str, identifier_types=IDENTIFIER_TYPES) -> list[tuple[str, str, str]]:
     identifiers = _object(value, "runtime_identifiers")
-    _keys(identifiers, set(IDENTIFIER_TYPES), set(), "runtime_identifiers")
+    _keys(identifiers, set(identifier_types), set(), "runtime_identifiers")
     seen: list[tuple[str, str, str]] = []
-    for identifier_type in IDENTIFIER_TYPES:
+    for identifier_type in identifier_types:
         aliases = identifiers[identifier_type]
         _require(isinstance(aliases, list), f"runtime_identifiers.{identifier_type}: expected array")
         local_values: set[str] = set()
@@ -360,7 +361,7 @@ def _validate_runtime_identifiers(value: Any, runtime_evidence: dict[str, dict[s
             _require(evidence["kind"] in RUNTIME_KINDS, f"{name}: aliases require qualified controller/SSH identity evidence")
             _require(evidence["canonical_sku"] == canonical_sku, f"{name}: runtime evidence SKU mismatch")
             if evidence["kind"] == "qualified_controller":
-                _require(identifier_type in {"api_model", "sysid"}, f"{name}: controller evidence cannot prove {identifier_type}")
+                _require(identifier_type in {"api_model", "legacy_model", "sysid"}, f"{name}: controller evidence cannot prove {identifier_type}")
             else:
                 _require(identifier_type == "ssh_model", f"{name}: SSH evidence can only prove ssh_model")
             _require(evidence["supports"].get(identifier_type) == alias["value"], f"{name}: alias value does not match evidence.supports.{identifier_type}")
@@ -369,6 +370,8 @@ def _validate_runtime_identifiers(value: Any, runtime_evidence: dict[str, dict[s
 
 
 def validate_model(model: dict[str, Any], official_evidence: dict[str, dict[str, Any]], runtime_evidence: dict[str, dict[str, Any]], *, filename: str | None = None) -> list[tuple[str, str, str]]:
+    if model.get("schema_version") == 2:
+        return _validate_rps_model(model, official_evidence, runtime_evidence, filename=filename)
     _keys(model, MODEL_REQUIRED, MODEL_OPTIONAL, "model")
     _require(model["schema_version"] == 1, "model.schema_version: unsupported")
     sku = model["canonical_sku"]
@@ -392,6 +395,45 @@ def validate_model(model: dict[str, Any], official_evidence: dict[str, dict[str,
     _validate_power(model["power"], {**official_evidence, **runtime_evidence}, poe_output_state=poe_output_state)
     _validate_fans(model["fans"])
     return runtime_aliases
+
+
+def _validate_rps_model(model: dict[str, Any], official_evidence: dict[str, dict[str, Any]], runtime_evidence: dict[str, dict[str, Any]], *, filename: str | None = None) -> list[tuple[str, str, str]]:
+    required = {"schema_version", "canonical_sku", "display_name", "device_type", "official_evidence_ids", "runtime_identifiers", "management_interface", "dc_outputs", "dc_power_rails"}
+    _keys(model, required, set(), "model v2")
+    _require(model["schema_version"] == 2 and model["device_type"] == "rps", "model v2: only the explicit rps device type is supported")
+    sku = model["canonical_sku"]
+    _require(isinstance(sku, str) and re.fullmatch(CANONICAL_SKU_PATTERN, sku), "model.canonical_sku: invalid value")
+    if filename is not None:
+        _require(filename == canonical_filename(sku), f"canonical SKU filename mismatch: {filename} != {canonical_filename(sku)}")
+    _require(isinstance(model["display_name"], str) and model["display_name"].strip(), "model.display_name: invalid value")
+    official_ids = model["official_evidence_ids"]
+    _require(isinstance(official_ids, list) and official_ids and len(official_ids) == len(set(official_ids)), "model.official_evidence_ids: invalid value")
+    for evidence_id in official_ids:
+        _require(evidence_id in official_evidence and official_evidence[evidence_id]["canonical_sku"] == sku, f"model: official evidence mismatch: {evidence_id}")
+    aliases = _validate_runtime_identifiers(model["runtime_identifiers"], runtime_evidence, sku, IDENTIFIER_TYPES_V2)
+    interface = _object(model["management_interface"], "management_interface")
+    _keys(interface, {"type", "count", "connector", "speed_mbps", "evidence_id"}, set(), "management_interface")
+    _require(interface["type"] == "ethernet" and isinstance(interface["count"], int) and not isinstance(interface["count"], bool) and interface["count"] == 1 and interface["connector"] == "rj45" and isinstance(interface["speed_mbps"], int) and not isinstance(interface["speed_mbps"], bool) and interface["speed_mbps"] == 1000, "management_interface: invalid Ethernet management interface")
+    _require(interface["evidence_id"] in official_ids, "management_interface: evidence must be official model evidence")
+    outputs = _object(model["dc_outputs"], "dc_outputs")
+    _keys(outputs, {"complete", "items"}, set(), "dc_outputs")
+    _require(outputs["complete"] is True and isinstance(outputs["items"], list) and len(outputs["items"]) == 6, "dc_outputs: six complete physical outputs are required")
+    rail_values = model["dc_power_rails"]
+    _require(isinstance(rail_values, list) and len(rail_values) == 2, "dc_power_rails: both distinct documented rails are required")
+    indexes: set[int] = set()
+    for index, output in enumerate(outputs["items"], 1):
+        _keys(output, {"index", "kind", "label"}, set(), f"dc_outputs.items[{index - 1}]")
+        _require(isinstance(output["index"], int) and not isinstance(output["index"], bool) and output["index"] == index and output["kind"] == "dc_power_output", f"dc_outputs.items[{index - 1}]: must be a numbered DC output")
+        _require(output["label"] == f"DC {index}", f"dc_outputs.items[{index - 1}]: invalid label")
+        indexes.add(output["index"])
+    _require(indexes == set(range(1, 7)), "dc_outputs: indexes must be exactly 1 through 6")
+    expected_rails = {"rail-11v5": (11.5, 350), "rail-52v": (52, 600)}
+    for index, rail in enumerate(rail_values):
+        _keys(rail, {"id", "nominal_voltage_v", "max_capacity_w", "evidence_id"}, set(), f"dc_power_rails[{index}]")
+        _require(rail["id"] in expected_rails and (rail["nominal_voltage_v"], rail["max_capacity_w"]) == expected_rails[rail["id"]], f"dc_power_rails[{index}]: documented rail facts do not match")
+        _require(rail["evidence_id"] in official_ids, f"dc_power_rails[{index}]: evidence must be official model evidence")
+    _require(len({rail["id"] for rail in rail_values}) == 2, "dc_power_rails: duplicate rail")
+    return aliases
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -448,7 +490,8 @@ def validate_catalog(root: Path) -> tuple[list[dict[str, Any]], dict[str, dict[s
         sku = model["canonical_sku"]
         _require(sku not in skus, f"duplicate canonical SKU: {sku}")
         skus.add(sku)
-        for identifier_type, value, _ in _validate_runtime_identifiers(model["runtime_identifiers"], runtime, sku):
+        identifier_types = IDENTIFIER_TYPES_V2 if model["schema_version"] == 2 else IDENTIFIER_TYPES
+        for identifier_type, value, _ in _validate_runtime_identifiers(model["runtime_identifiers"], runtime, sku, identifier_types):
             alias = next(alias for alias in model["runtime_identifiers"][identifier_type] if alias["value"] == value)
             if alias["status"] == "verified":
                 owner_key = (identifier_type, value)
@@ -462,23 +505,28 @@ def validate_catalog(root: Path) -> tuple[list[dict[str, Any]], dict[str, dict[s
 def normalized_model(model: dict[str, Any]) -> dict[str, Any]:
     result = copy.deepcopy(model)
     result["official_evidence_ids"] = sorted(result["official_evidence_ids"])
-    for identifier_type in IDENTIFIER_TYPES:
+    for identifier_type in result["runtime_identifiers"]:
         result["runtime_identifiers"][identifier_type] = sorted(
             result["runtime_identifiers"][identifier_type],
             key=lambda alias: (alias["value"], alias["status"], alias["provenance"], alias["evidence_id"]),
         )
-    result["ports"]["items"] = sorted(result["ports"]["items"], key=lambda port: port["index"])
-    result["storage"]["items"] = sorted(
-        result["storage"]["items"],
-        key=lambda item: (item["type"], item["kind"], item["default_presence"], item["capacity_bytes"] is None, item["capacity_bytes"] or 0),
-    )
-    result["power"]["power_profiles"] = sorted(result["power"]["power_profiles"], key=lambda profile: profile["id"])
+    if result["schema_version"] == 1:
+        result["ports"]["items"] = sorted(result["ports"]["items"], key=lambda port: port["index"])
+        result["storage"]["items"] = sorted(
+            result["storage"]["items"],
+            key=lambda item: (item["type"], item["kind"], item["default_presence"], item["capacity_bytes"] is None, item["capacity_bytes"] or 0),
+        )
+        result["power"]["power_profiles"] = sorted(result["power"]["power_profiles"], key=lambda profile: profile["id"])
+    else:
+        result["official_evidence_ids"] = sorted(result["official_evidence_ids"])
+        result["dc_outputs"]["items"] = sorted(result["dc_outputs"]["items"], key=lambda item: item["index"])
+        result["dc_power_rails"] = sorted(result["dc_power_rails"], key=lambda item: item["id"])
     return result
 
 
 def normalized_catalog(models: list[dict[str, Any]]) -> dict[str, Any]:
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "models": [normalized_model(model) for model in sorted(models, key=lambda model: model["canonical_sku"].lower())],
     }
 
@@ -490,25 +538,49 @@ def canonical_json(value: Any) -> bytes:
 def build_index(models: list[dict[str, Any]]) -> dict[str, Any]:
     index_models = []
     for model in sorted(models, key=lambda item: item["canonical_sku"].lower()):
+        identifier_types = IDENTIFIER_TYPES_V2
         verified = {
-            identifier_type: sorted(alias["value"] for alias in model["runtime_identifiers"][identifier_type] if alias["status"] == "verified")
-            for identifier_type in IDENTIFIER_TYPES
+            identifier_type: sorted(alias["value"] for alias in model["runtime_identifiers"].get(identifier_type, []) if alias["status"] == "verified")
+            for identifier_type in identifier_types
         }
+        if model["schema_version"] == 1:
+            port_count = len(model["ports"]["items"])
+            ports_complete = model["ports"]["complete"]
+            dc_outputs = {"count": 0, "complete": False, "rail_ids": []}
+            storage_complete = model["storage"]["complete"]
+            fan_status = model["fans"]["status"]
+            poe_budget = model["power"]["absolute_max_poe_budget_w"]
+            profiles = model["power"]["power_profiles"]
+        else:
+            # `port_count` describes data/network interfaces only. The RPS
+            # management Ethernet interface and six DC outputs are represented
+            # independently and must not be merged into this count.
+            port_count = 0
+            ports_complete = False
+            dc_outputs = {"count": len(model["dc_outputs"]["items"]), "complete": model["dc_outputs"]["complete"], "rail_ids": sorted(rail["id"] for rail in model["dc_power_rails"])}
+            storage_complete = False
+            fan_status = "unknown"
+            poe_budget = None
+            profiles = []
         index_models.append({
             "canonical_sku": model["canonical_sku"],
             "display_name": model["display_name"],
             "device_type": model["device_type"],
+            "model_schema_version": model["schema_version"],
             "source_file": "models/" + canonical_filename(model["canonical_sku"]),
-            "port_count": len(model["ports"]["items"]),
-            "ports_complete": model["ports"]["complete"],
-            "storage_complete": model["storage"]["complete"],
-            "fan_status": model["fans"]["status"],
-            "absolute_max_poe_budget_w": model["power"]["absolute_max_poe_budget_w"],
-            "power_profile_count": len(model["power"]["power_profiles"]),
-            "verified_power_profile_ids": sorted(profile["id"] for profile in model["power"]["power_profiles"] if profile["status"] == "verified"),
+            "port_count": port_count,
+            "ports_complete": ports_complete,
+            "dc_output_count": dc_outputs["count"],
+            "dc_outputs_complete": dc_outputs["complete"],
+            "dc_power_rail_ids": dc_outputs["rail_ids"],
+            "storage_complete": storage_complete,
+            "fan_status": fan_status,
+            "absolute_max_poe_budget_w": poe_budget,
+            "power_profile_count": len(profiles),
+            "verified_power_profile_ids": sorted(profile["id"] for profile in profiles if profile["status"] == "verified"),
             "verified_runtime_identifiers": verified,
         })
-    return {"schema_version": 1, "model_count": len(index_models), "models": index_models}
+    return {"schema_version": 2, "model_count": len(index_models), "models": index_models}
 
 
 def catalog_sha256(catalog_bytes: bytes) -> str:

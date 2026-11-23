@@ -72,7 +72,9 @@ def validate_json_schemas(root: Path) -> None:
     index_schema = schemas["index.schema.json"]
 
     for path in sorted((root / "models").glob("*.json")):
-        _validate(_read(path), model_schema, str(path.relative_to(root)), store)
+        model = _read(path)
+        selected_model_schema = schemas["model-v2.schema.json"] if model.get("schema_version") == 2 else model_schema
+        _validate(model, selected_model_schema, str(path.relative_to(root)), store)
     for directory in ("official", "runtime"):
         for path in sorted((root / "evidence" / directory).glob("*.json")):
             _validate(_read(path), evidence_schema, str(path.relative_to(root)), store)

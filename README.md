@@ -71,6 +71,27 @@ aliases are resolver inputs. Matching is exact and ordered as verified sysid,
 verified API model, verified SSH Model, then canonical SKU only when the caller
 explicitly supplies an official SKU.
 
+## Catalog schema v2 and RPS / Catalog Schema v2 与 RPS
+
+Catalog bundle v2 is a mixed-version bundle: existing gateway/switch/AP
+definitions remain schema-v1 model objects; new non-Ethernet device families
+use a separately validated v2 model contract. The first v2 family is
+`device_type=rps`, with dedicated `dc_outputs` and separate static
+`dc_power_rails`. The six DC outputs are not Ethernet ports. USP-RPS's one GbE
+RJ45 management interface is represented independently.
+
+The USP-RPS model keeps the 52 V / 600 W rail and 11.5 V / 350 W rail as two
+separate static capacities. They are not added into a generic total and are
+never runtime power readings. The six numbered DC outputs do not claim a
+per-output rail assignment. Runtime `power_delivering`, active state, observed
+watts, protected-device references, collection time and diagnostics belong to
+HardwareStatus, not this Catalog.
+
+The v2 RPS resolver contract adds the typed `legacy_model` identifier while
+preserving the v1 `api_model`, `sysid`, and `ssh_model` shape for every existing
+model. The verified USP-RPS aliases are exact: Integration API `USP RPS` and
+Legacy API `USPRPS`; both are backed by sanitized controller identity evidence.
+
 ## Phase 1 batch / 第一批型号
 
 本分支首批录入 20 个官方 SKU：UDW、UCG-Max、USW-Flex、USW-Flex-Mini、
@@ -143,11 +164,14 @@ Legacy profile migration audit: [`docs/hermesstatus-migration-audit.md`](docs/he
 
 ## Runtime evidence binding / 运行时证据绑定
 
-Every runtime evidence record binds a canonical SKU. Controller evidence may
-prove only api_model or sysid; SSH evidence may prove only ssh_model.
+Every runtime evidence record binds a canonical SKU. V1 controller evidence may
+prove only api_model or sysid; the RPS v2 contract additionally permits the
+explicitly typed legacy_model from the existing legacy Controller source.
+SSH evidence may prove only ssh_model.
 qualified_runtime_static evidence may prove only an explicitly allowed static
 field and never becomes a resolver alias.
 
-每条运行时证据都绑定 canonical SKU。controller 证据只能证明 api_model 或
-sysid，SSH 证据只能证明 ssh_model；qualified_runtime_static 只能证明明确
+每条运行时证据都绑定 canonical SKU。V1 controller 证据只能证明 api_model 或
+sysid；RPS V2 另允许来自现有 Legacy Controller source 的 legacy_model。
+SSH 证据只能证明 ssh_model；qualified_runtime_static 只能证明明确
 允许的静态字段，不能直接成为 resolver alias。

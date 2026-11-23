@@ -121,6 +121,10 @@
               "type": "string",
               "minLength": 1
             },
+            "legacy_model": {
+              "type": "string",
+              "minLength": 1
+            },
             "sysid": {
               "type": "string",
               "minLength": 1

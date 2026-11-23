@@ -1,39 +1,44 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/404404/UniFi_Catalog/schema/index.schema.json",
-  "title": "UniFi Catalog generated index v1",
+  "title": "UniFi Catalog generated index v2",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "model_count", "models"],
   "properties": {
-    "schema_version": {"const": 1},
+    "schema_version": {"const": 2},
     "model_count": {"type": "integer", "minimum": 0},
     "models": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["canonical_sku", "display_name", "device_type", "source_file", "port_count", "ports_complete", "storage_complete", "fan_status", "absolute_max_poe_budget_w", "power_profile_count", "verified_power_profile_ids", "verified_runtime_identifiers"],
+        "required": ["canonical_sku", "display_name", "device_type", "model_schema_version", "source_file", "port_count", "ports_complete", "dc_output_count", "dc_outputs_complete", "dc_power_rail_ids", "storage_complete", "fan_status", "absolute_max_poe_budget_w", "power_profile_count", "verified_power_profile_ids", "verified_runtime_identifiers"],
         "properties": {
           "canonical_sku": {"type": "string", "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"},
           "display_name": {"type": "string", "minLength": 1},
-          "device_type": {"enum": ["gateway", "switch", "ap"]},
+          "device_type": {"enum": ["gateway", "switch", "ap", "rps"]},
+          "model_schema_version": {"enum": [1, 2]},
           "source_file": {"type": "string", "pattern": "^models/[a-z0-9][a-z0-9.-]*\\.json$"},
           "port_count": {"type": "integer", "minimum": 0},
           "ports_complete": {"type": "boolean"},
+          "dc_output_count": {"type": "integer", "minimum": 0, "maximum": 6},
+          "dc_outputs_complete": {"type": "boolean"},
+          "dc_power_rail_ids": {"type": "array", "maxItems": 2, "items": {"enum": ["rail-11v5", "rail-52v"]}, "uniqueItems": true},
           "storage_complete": {"type": "boolean"},
           "fan_status": {"enum": ["present", "absent", "unknown"]},
           "absolute_max_poe_budget_w": {"type": ["number", "null"], "minimum": 0},
-          "power_profile_count": {"type": "integer", "minimum": 1},
+          "power_profile_count": {"type": "integer", "minimum": 0},
           "verified_power_profile_ids": {"type": "array", "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"}, "uniqueItems": true},
           "verified_runtime_identifiers": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["api_model", "sysid", "ssh_model"],
+            "required": ["api_model", "legacy_model", "sysid", "ssh_model"],
             "properties": {
               "api_model": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
               "sysid": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
-              "ssh_model": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+              "ssh_model": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+              "legacy_model": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
             }
           }
         }
