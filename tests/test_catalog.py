@@ -260,10 +260,16 @@ class CatalogTests(unittest.TestCase):
     def test_all_physical_port_labels_are_neutral(self):
         for model in self.models:
             with self.subTest(canonical_sku=model["canonical_sku"]):
-                self.assertEqual(
-                    [port["label"] for port in model["ports"]["items"]],
-                    [f"Port {port['index']}" for port in model["ports"]["items"]],
-                )
+                if model["schema_version"] == 1:
+                    self.assertEqual(
+                        [port["label"] for port in model["ports"]["items"]],
+                        [f"Port {port['index']}" for port in model["ports"]["items"]],
+                    )
+                else:
+                    self.assertEqual(
+                        [output["label"] for output in model["dc_outputs"]["items"]],
+                        [f"DC {output['index']}" for output in model["dc_outputs"]["items"]],
+                    )
 
     def test_in_wall_port_roles_and_poe_passthrough_are_typed(self):
         for filename in ("u6-iw.json", "u6-enterprise-iw.json"):
@@ -462,7 +468,10 @@ class CatalogTests(unittest.TestCase):
 
     def test_unknown_fan_is_not_present(self):
         for model in self.models:
-            self.assertEqual(model["fans"], {"status": "unknown", "count": None})
+            if model["schema_version"] == 1:
+                self.assertEqual(model["fans"], {"status": "unknown", "count": None})
+            else:
+                self.assertNotIn("fans", model)
 
     def test_flex_25g_poe_manual_profiles_are_field_qualified(self):
         model = self.model("usw-flex-2.5g-8-poe.json")
@@ -497,6 +506,8 @@ class CatalogTests(unittest.TestCase):
         expected = {"poe": 15.4, "poe+": 30, "poe++": 60, "poe+++": 90}
         output_count = 0
         for model in self.models:
+            if model["schema_version"] != 1:
+                continue
             for port in model["ports"]["items"]:
                 if port["poe_out"] is True and port["poe_standard"] is not None:
                     output_count += 1
@@ -552,6 +563,8 @@ class CatalogTests(unittest.TestCase):
 
     def test_input_only_poe_ports_keep_output_wattage_unknown(self):
         for model in self.models:
+            if model["schema_version"] != 1:
+                continue
             for port in model["ports"]["items"]:
                 if port["poe_in"] is True and port["poe_out"] is False:
                     self.assertIsNone(port["poe_max_power_w"])
