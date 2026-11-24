@@ -1,14 +1,18 @@
 {
-  "schema_version": 1,
-  "model_count": 20,
+  "schema_version": 2,
+  "model_count": 21,
   "models": [
     {
       "canonical_sku": "U6-Enterprise-IW",
       "display_name": "U6 Enterprise In-Wall",
       "device_type": "ap",
+      "model_schema_version": 1,
       "source_file": "models/u6-enterprise-iw.json",
       "port_count": 5,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": null,
@@ -20,6 +24,7 @@
         "api_model": [
           "U6 Enterprise IW"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -28,9 +33,13 @@
       "canonical_sku": "U6-IW",
       "display_name": "U6 In-Wall",
       "device_type": "ap",
+      "model_schema_version": 1,
       "source_file": "models/u6-iw.json",
       "port_count": 5,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": null,
@@ -42,6 +51,7 @@
         "api_model": [
           "U6 IW"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -50,9 +60,13 @@
       "canonical_sku": "U6-Mesh",
       "display_name": "U6 Mesh",
       "device_type": "ap",
+      "model_schema_version": 1,
       "source_file": "models/u6-mesh.json",
       "port_count": 1,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 0,
@@ -64,6 +78,7 @@
         "api_model": [
           "U6 Mesh"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -72,9 +87,13 @@
       "canonical_sku": "UAP-AC-M",
       "display_name": "AC Mesh",
       "device_type": "ap",
+      "model_schema_version": 1,
       "source_file": "models/uap-ac-m.json",
       "port_count": 1,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 0,
@@ -86,6 +105,7 @@
         "api_model": [
           "AC Mesh"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -94,9 +114,13 @@
       "canonical_sku": "UAP-IW-HD",
       "display_name": "In-Wall HD",
       "device_type": "ap",
+      "model_schema_version": 1,
       "source_file": "models/uap-iw-hd.json",
       "port_count": 5,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": null,
@@ -106,6 +130,7 @@
       ],
       "verified_runtime_identifiers": {
         "api_model": [],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -114,9 +139,13 @@
       "canonical_sku": "UCG-Max",
       "display_name": "Cloud Gateway Max",
       "device_type": "gateway",
+      "model_schema_version": 1,
       "source_file": "models/ucg-max.json",
       "port_count": 5,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": true,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 0,
@@ -128,6 +157,7 @@
         "api_model": [
           "UCG Max"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": [
           "Qualcomm Technologies, Inc. IPQ5332/AP-MI03.1"
@@ -138,9 +168,13 @@
       "canonical_sku": "UDW",
       "display_name": "Dream Wall",
       "device_type": "gateway",
+      "model_schema_version": 1,
       "source_file": "models/udw.json",
       "port_count": 20,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": true,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 420,
@@ -152,6 +186,7 @@
         "api_model": [
           "UniFi Dream Wall"
         ],
+        "legacy_model": [],
         "sysid": [
           "0xea2a"
         ],
@@ -164,9 +199,13 @@
       "canonical_sku": "US-XG-6POE",
       "display_name": "XG 6 PoE (Gen1)",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/us-xg-6poe.json",
       "port_count": 6,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 170,
@@ -178,6 +217,37 @@
         "api_model": [
           "US XG 6 PoE"
         ],
+        "legacy_model": [],
+        "sysid": [],
+        "ssh_model": []
+      }
+    },
+    {
+      "canonical_sku": "USP-RPS",
+      "display_name": "UniFi Redundant Power System",
+      "device_type": "rps",
+      "model_schema_version": 2,
+      "source_file": "models/usp-rps.json",
+      "port_count": 0,
+      "ports_complete": false,
+      "dc_output_count": 6,
+      "dc_outputs_complete": true,
+      "dc_power_rail_ids": [
+        "rail-11v5",
+        "rail-52v"
+      ],
+      "storage_complete": false,
+      "fan_status": "unknown",
+      "absolute_max_poe_budget_w": null,
+      "power_profile_count": 0,
+      "verified_power_profile_ids": [],
+      "verified_runtime_identifiers": {
+        "api_model": [
+          "USP RPS"
+        ],
+        "legacy_model": [
+          "USPRPS"
+        ],
         "sysid": [],
         "ssh_model": []
       }
@@ -186,9 +256,13 @@
       "canonical_sku": "USW-Enterprise-8-PoE",
       "display_name": "Enterprise 8 PoE (Vintage)",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-enterprise-8-poe.json",
       "port_count": 10,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 120,
@@ -198,6 +272,7 @@
       ],
       "verified_runtime_identifiers": {
         "api_model": [],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -206,9 +281,13 @@
       "canonical_sku": "USW-Flex",
       "display_name": "Flex",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-flex.json",
       "port_count": 5,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 46,
@@ -223,6 +302,7 @@
         "api_model": [
           "USW Flex"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -231,9 +311,13 @@
       "canonical_sku": "USW-Flex-2.5G-5",
       "display_name": "Flex Mini 2.5G",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-flex-2.5g-5.json",
       "port_count": 5,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 0,
@@ -244,6 +328,7 @@
       ],
       "verified_runtime_identifiers": {
         "api_model": [],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -252,9 +337,13 @@
       "canonical_sku": "USW-Flex-2.5G-8",
       "display_name": "Flex 2.5G",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-flex-2.5g-8.json",
       "port_count": 10,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 0,
@@ -266,6 +355,7 @@
       ],
       "verified_runtime_identifiers": {
         "api_model": [],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -274,9 +364,13 @@
       "canonical_sku": "USW-Flex-2.5G-8-PoE",
       "display_name": "Flex 2.5G PoE",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-flex-2.5g-8-poe.json",
       "port_count": 10,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 196,
@@ -293,6 +387,7 @@
         "api_model": [
           "USW Flex 2.5G 8 PoE"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -301,9 +396,13 @@
       "canonical_sku": "USW-Flex-Mini",
       "display_name": "Flex Mini",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-flex-mini.json",
       "port_count": 5,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 0,
@@ -316,6 +415,7 @@
         "api_model": [
           "USW Flex Mini"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -324,9 +424,13 @@
       "canonical_sku": "USW-Pro-HD-24",
       "display_name": "Pro HD 24",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-pro-hd-24.json",
       "port_count": 28,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 0,
@@ -339,6 +443,7 @@
         "api_model": [
           "USW Pro HD 24"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -347,9 +452,13 @@
       "canonical_sku": "USW-Pro-HD-24-PoE",
       "display_name": "Pro HD 24 PoE",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-pro-hd-24-poe.json",
       "port_count": 28,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 600,
@@ -360,6 +469,7 @@
       ],
       "verified_runtime_identifiers": {
         "api_model": [],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -368,9 +478,13 @@
       "canonical_sku": "USW-Pro-Max-16",
       "display_name": "Pro Max 16",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-pro-max-16.json",
       "port_count": 18,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 0,
@@ -381,6 +495,7 @@
       ],
       "verified_runtime_identifiers": {
         "api_model": [],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -389,9 +504,13 @@
       "canonical_sku": "USW-Pro-Max-16-PoE",
       "display_name": "Pro Max 16 PoE",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-pro-max-16-poe.json",
       "port_count": 18,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 180,
@@ -403,6 +522,7 @@
         "api_model": [
           "USW Pro Max 16 PoE"
         ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -411,9 +531,13 @@
       "canonical_sku": "USW-Pro-Max-24",
       "display_name": "Pro Max 24",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-pro-max-24.json",
       "port_count": 26,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 0,
@@ -424,6 +548,7 @@
       ],
       "verified_runtime_identifiers": {
         "api_model": [],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }
@@ -432,9 +557,13 @@
       "canonical_sku": "USW-Pro-Max-24-PoE",
       "display_name": "Pro Max 24 PoE",
       "device_type": "switch",
+      "model_schema_version": 1,
       "source_file": "models/usw-pro-max-24-poe.json",
       "port_count": 26,
       "ports_complete": true,
+      "dc_output_count": 0,
+      "dc_outputs_complete": false,
+      "dc_power_rail_ids": [],
       "storage_complete": false,
       "fan_status": "unknown",
       "absolute_max_poe_budget_w": 400,
@@ -444,7 +573,10 @@
         "dc-backup"
       ],
       "verified_runtime_identifiers": {
-        "api_model": [],
+        "api_model": [
+          "USW Pro Max 24 PoE"
+        ],
+        "legacy_model": [],
         "sysid": [],
         "ssh_model": []
       }

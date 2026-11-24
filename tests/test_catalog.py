@@ -13,6 +13,7 @@ from tools.catalog import (
     CatalogError,
     canonical_json,
     active_power_profiles,
+    build_index,
     classify_poe_output,
     classify_storage,
     load_evidence,
@@ -48,12 +49,67 @@ class CatalogTests(unittest.TestCase):
             "evidence_id": evidence_id,
         })
 
-    def test_catalog_has_twenty_canonical_models(self):
-        self.assertEqual(len(self.models), 20)
+    def test_catalog_has_twenty_one_canonical_models(self):
+        self.assertEqual(len(self.models), 21)
         self.assertEqual(
             [model["canonical_sku"] for model in self.models],
             sorted((model["canonical_sku"] for model in self.models), key=str.lower),
         )
+
+    def test_usp_rps_v2_keeps_dc_outputs_separate_from_ethernet(self):
+        model = self.model("usp-rps.json")
+        self.assertEqual((model["schema_version"], model["device_type"]), (2, "rps"))
+        self.assertEqual(model["management_interface"], {
+            "type": "ethernet", "count": 1, "connector": "rj45", "speed_mbps": 1000,
+            "evidence_id": "official-usp-rps-techspecs-20261123",
+        })
+        self.assertEqual(len(model["dc_outputs"]["items"]), 6)
+        self.assertEqual([item["kind"] for item in model["dc_outputs"]["items"]], ["dc_power_output"] * 6)
+        self.assertTrue(all("supported_rail_ids" not in item for item in model["dc_outputs"]["items"]))
+        self.assertEqual(
+            [(rail["nominal_voltage_v"], rail["max_capacity_w"]) for rail in model["dc_power_rails"]],
+            [(11.5, 350), (52, 600)],
+        )
+        self.assertNotIn("combined_capacity_w", model)
+        index = next(item for item in build_index(self.models)["models"] if item["canonical_sku"] == "USP-RPS")
+        self.assertEqual(index["port_count"], 0)
+        self.assertFalse(index["ports_complete"])
+        self.assertEqual(index["dc_output_count"], 6)
+
+    def test_usp_rps_api_and_legacy_aliases_resolve_exactly(self):
+        model = self.model("usp-rps.json")
+        self.assertIs(resolve_model([model], "USP RPS", identifier_type="api_model"), model)
+        self.assertIs(resolve_model([model], "USPRPS", identifier_type="legacy_model"), model)
+        self.assertIsNone(resolve_model([model], "USP-RPS", identifier_type="api_model"))
+        self.assertIsNone(resolve_model([model], "USPRPS", identifier_type="api_model"))
+
+    def test_catalog_v2_bundle_retains_legacy_v1_models_unchanged(self):
+        bundle = normalized_catalog(self.models)
+        self.assertEqual(bundle["schema_version"], 2)
+        by_sku = {item["canonical_sku"]: item for item in bundle["models"]}
+        self.assertEqual(by_sku["UCG-Max"]["schema_version"], 1)
+        self.assertEqual(set(by_sku["UCG-Max"]["runtime_identifiers"]), {"api_model", "sysid", "ssh_model"})
+        self.assertEqual(by_sku["USP-RPS"]["schema_version"], 2)
+
+    def test_usp_rps_static_model_rejects_runtime_or_ethernet_masquerade(self):
+        model = self.model("usp-rps.json")
+        model["dc_outputs"]["items"][0]["kind"] = "ethernet"
+        with self.assertRaisesRegex(CatalogError, "must be a numbered DC output"):
+            validate_model(model, self.official, self.runtime)
+        model = self.model("usp-rps.json")
+        model["runtime_state"] = {"power_delivering": True}
+        with self.assertRaisesRegex(CatalogError, "unexpected"):
+            validate_model(model, self.official, self.runtime)
+
+    def test_usp_rps_schema_rejects_boolean_numeric_fields(self):
+        model = self.model("usp-rps.json")
+        model["management_interface"]["count"] = True
+        with self.assertRaisesRegex(CatalogError, "management_interface"):
+            validate_model(model, self.official, self.runtime)
+        model = self.model("usp-rps.json")
+        model["dc_outputs"]["items"][0]["index"] = True
+        with self.assertRaisesRegex(CatalogError, "numbered DC output"):
+            validate_model(model, self.official, self.runtime)
 
     def test_verified_alias_resolves_exactly(self):
         model = self.model("ucg-max.json")
@@ -161,13 +217,59 @@ class CatalogTests(unittest.TestCase):
                 self.assertIsNotNone(model)
                 self.assertEqual(model["canonical_sku"], expected_sku)
 
+    def test_pro_max_24_poe_live_api_identity_resolves_exact_static_capabilities(self):
+        model = resolve_model(
+            self.models,
+            "USW Pro Max 24 PoE",
+            identifier_type="api_model",
+        )
+        self.assertIsNotNone(model)
+        self.assertEqual(model["canonical_sku"], "USW-Pro-Max-24-PoE")
+        self.assertEqual(len(model["ports"]["items"]), 26)
+        ports = {port["index"]: port for port in model["ports"]["items"]}
+        for index in range(1, 9):
+            self.assertEqual(
+                (ports[index]["max_speed_mbps"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (1000, "poe+", 30),
+            )
+        for index in range(9, 17):
+            self.assertEqual(
+                (ports[index]["max_speed_mbps"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (1000, "poe++", 60),
+            )
+        for index in range(17, 25):
+            self.assertEqual(
+                (ports[index]["max_speed_mbps"], ports[index]["poe_standard"], ports[index]["poe_max_power_w"]),
+                (2500, "poe++", 60),
+            )
+        for index in (25, 26):
+            self.assertEqual((ports[index]["max_speed_mbps"], ports[index]["connector"], ports[index]["poe_out"]), (10000, "sfp_plus", False))
+
+        power = model["power"]
+        self.assertEqual(power["absolute_max_poe_budget_w"], 400)
+        self.assertEqual(power["max_device_consumption_w"], 450)
+        ac_profile = next(profile for profile in power["power_profiles"] if profile["id"] == "ac-mains")
+        self.assertEqual((ac_profile["input_capacity_w"], ac_profile["poe_budget_w"]), (550, 400))
+        dc_profile = next(profile for profile in power["power_profiles"] if profile["id"] == "dc-backup")
+        self.assertEqual((dc_profile["input_capacity_w"], dc_profile["poe_budget_w"]), (None, None))
+
+    def test_pro_max_24_non_poe_or_marketing_name_cannot_use_poe_alias(self):
+        self.assertIsNone(resolve_model(self.models, "USW Pro Max 24", identifier_type="api_model"))
+        self.assertIsNone(resolve_model(self.models, "Pro Max 24 PoE", identifier_type="api_model"))
+
     def test_all_physical_port_labels_are_neutral(self):
         for model in self.models:
             with self.subTest(canonical_sku=model["canonical_sku"]):
-                self.assertEqual(
-                    [port["label"] for port in model["ports"]["items"]],
-                    [f"Port {port['index']}" for port in model["ports"]["items"]],
-                )
+                if model["schema_version"] == 1:
+                    self.assertEqual(
+                        [port["label"] for port in model["ports"]["items"]],
+                        [f"Port {port['index']}" for port in model["ports"]["items"]],
+                    )
+                else:
+                    self.assertEqual(
+                        [output["label"] for output in model["dc_outputs"]["items"]],
+                        [f"DC {output['index']}" for output in model["dc_outputs"]["items"]],
+                    )
 
     def test_in_wall_port_roles_and_poe_passthrough_are_typed(self):
         for filename in ("u6-iw.json", "u6-enterprise-iw.json"):
@@ -366,7 +468,10 @@ class CatalogTests(unittest.TestCase):
 
     def test_unknown_fan_is_not_present(self):
         for model in self.models:
-            self.assertEqual(model["fans"], {"status": "unknown", "count": None})
+            if model["schema_version"] == 1:
+                self.assertEqual(model["fans"], {"status": "unknown", "count": None})
+            else:
+                self.assertNotIn("fans", model)
 
     def test_flex_25g_poe_manual_profiles_are_field_qualified(self):
         model = self.model("usw-flex-2.5g-8-poe.json")
@@ -401,6 +506,8 @@ class CatalogTests(unittest.TestCase):
         expected = {"poe": 15.4, "poe+": 30, "poe++": 60, "poe+++": 90}
         output_count = 0
         for model in self.models:
+            if model["schema_version"] != 1:
+                continue
             for port in model["ports"]["items"]:
                 if port["poe_out"] is True and port["poe_standard"] is not None:
                     output_count += 1
@@ -456,6 +563,8 @@ class CatalogTests(unittest.TestCase):
 
     def test_input_only_poe_ports_keep_output_wattage_unknown(self):
         for model in self.models:
+            if model["schema_version"] != 1:
+                continue
             for port in model["ports"]["items"]:
                 if port["poe_in"] is True and port["poe_out"] is False:
                     self.assertIsNone(port["poe_max_power_w"])

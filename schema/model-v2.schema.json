@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/404404/UniFi_Catalog/schema/model-v2.schema.json",
+  "title": "UniFi Catalog model v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "canonical_sku",
+    "display_name",
+    "device_type",
+    "official_evidence_ids",
+    "runtime_identifiers",
+    "management_interface",
+    "dc_outputs",
+    "dc_power_rails"
+  ],
+  "properties": {
+    "schema_version": {"const": 2},
+    "canonical_sku": {"type": "string", "pattern": "^[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*$"},
+    "display_name": {"type": "string", "minLength": 1},
+    "device_type": {"const": "rps"},
+    "official_evidence_ids": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^official-[a-z0-9-]+$"},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "runtime_identifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["api_model", "legacy_model", "sysid", "ssh_model"],
+      "properties": {
+        "api_model": {"$ref": "#/$defs/runtime_aliases"},
+        "legacy_model": {"$ref": "#/$defs/runtime_aliases"},
+        "sysid": {"$ref": "#/$defs/runtime_aliases"},
+        "ssh_model": {"$ref": "#/$defs/runtime_aliases"}
+      }
+    },
+    "management_interface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "count", "connector", "speed_mbps", "evidence_id"],
+      "properties": {
+        "type": {"const": "ethernet"},
+        "count": {"const": 1},
+        "connector": {"const": "rj45"},
+        "speed_mbps": {"const": 1000},
+        "evidence_id": {"type": "string", "pattern": "^official-[a-z0-9-]+$"}
+      }
+    },
+    "dc_outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["complete", "items"],
+      "properties": {
+        "complete": {"type": "boolean"},
+        "items": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {"$ref": "#/$defs/dc_output"}
+        }
+      }
+    },
+    "dc_power_rails": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"$ref": "#/$defs/dc_power_rail"}
+    }
+  },
+  "$defs": {
+    "runtime_aliases": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/runtime_alias"},
+      "uniqueItems": true
+    },
+    "runtime_alias": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "status", "provenance", "evidence_id"],
+      "properties": {
+        "value": {"type": "string", "minLength": 1},
+        "status": {"enum": ["candidate", "verified"]},
+        "provenance": {"type": "string", "minLength": 1},
+        "evidence_id": {"type": "string", "pattern": "^runtime-[a-z0-9-]+$"}
+      }
+    },
+    "dc_output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "kind", "label"],
+      "properties": {
+        "index": {"type": "integer", "minimum": 1, "maximum": 6},
+        "kind": {"const": "dc_power_output"},
+        "label": {"type": "string", "minLength": 1}
+      }
+    },
+    "dc_power_rail": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "nominal_voltage_v", "max_capacity_w", "evidence_id"],
+      "properties": {
+        "id": {"enum": ["rail-11v5", "rail-52v"]},
+        "nominal_voltage_v": {"type": "number", "exclusiveMinimum": 0},
+        "max_capacity_w": {"type": "number", "exclusiveMinimum": 0},
+        "evidence_id": {"type": "string", "pattern": "^official-[a-z0-9-]+$"}
+      }
+    }
+  }
+}

@@ -7,7 +7,12 @@
     "official-usw-pro-max-24-poe-techspecs-20260830"
   ],
   "runtime_identifiers": {
-    "api_model": [],
+    "api_model": [{
+      "value": "USW Pro Max 24 PoE",
+      "status": "verified",
+      "provenance": "qualified_controller",
+      "evidence_id": "runtime-usw-pro-max-24-poe-controller-identity-20261122"
+    }],
     "sysid": [],
     "ssh_model": []
   },

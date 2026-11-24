@@ -28,6 +28,16 @@ budget and must not be replaced by `sum(port.poe_max_power_w)`.
 `null` is an explicit unknown value. `complete=false` means research is
 incomplete; it does not mean the hardware capability is absent.
 
+Catalog bundle v2 may contain a model-schema-v2 RPS item alongside unchanged
+model-schema-v1 gateway, switch, and AP items. The RPS model uses
+`device_type=rps`, an independent Ethernet management-interface description,
+six `dc_outputs`, and separately keyed `dc_power_rails`. DC outputs never
+participate in Ethernet port normalization, and no per-output rail assignment
+is inferred. Generated `dc_power_rail_ids` summarizes the device's separate
+static rail definitions; it is not a port-to-rail mapping. The v2 RPS resolver
+may use the typed `legacy_model` identifier in addition to the v1 identifier types.
+Runtime power state and readings remain outside the Catalog.
+
 
 ## Power profiles
 

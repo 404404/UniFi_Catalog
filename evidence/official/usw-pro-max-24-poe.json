@@ -7,8 +7,8 @@
       "url": "https://techspecs.ui.com/unifi/switching/usw-pro-max-24-poe",
       "publisher": "Ubiquiti",
       "title": "Pro Max 24 PoE - Tech Specs",
-      "retrieved_on": "2026-08-30",
-      "evidence_note": "Official 16x1 GbE RJ45 ports with 8 PoE+ and 8 PoE++, 8x2.5 GbE RJ45 PoE++, 2x10G SFP+, 400 W PoE availability and internal 550 W AC supply."
+      "retrieved_on": "2026-11-22",
+      "evidence_note": "Official specifications list 16x1 GbE RJ45 (ports 1-8 PoE+, ports 9-16 PoE++), 8x2.5 GbE RJ45 PoE++, 2x10G SFP+, 400 W total PoE availability, 550 W internal AC supply, 450 W maximum consumption including PoE, 50 W excluding PoE, and USP-RPS DC input. The official per-port PSE ceilings are 32 W for PoE+ and 60 W for PoE++; the Catalog's poe_max_power_w remains the normalized IEEE class reference (30 W PoE+, 60 W PoE++) and must not be conflated with the PSE ceiling."
     }
   ],
   "fields_supported": [
@@ -21,5 +21,5 @@
     "power_profiles",
     "power.absolute_max_poe_budget_w"
   ],
-  "notes": "Official 16x1 GbE RJ45 ports with 8 PoE+ and 8 PoE++, 8x2.5 GbE RJ45 PoE++, 2x10G SFP+, 400 W PoE availability and internal 550 W AC supply."
+  "notes": "Official 16x1 GbE RJ45 ports with 8 PoE+ and 8 PoE++, 8x2.5 GbE RJ45 PoE++, 2x10G SFP+, 400 W total PoE, 550 W internal AC supply, 450 W maximum consumption including PoE (50 W excluding PoE), and USP-RPS DC input. Per-port PSE limits (32 W PoE+; 60 W PoE++) are distinct from the normalized IEEE class reference stored in Catalog ports (30 W PoE+; 60 W PoE++)."
 }

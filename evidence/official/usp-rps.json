@@ -1,0 +1,22 @@
+{
+  "id": "official-usp-rps-techspecs-20261123",
+  "kind": "official_spec",
+  "canonical_sku": "USP-RPS",
+  "sources": [
+    {
+      "url": "https://techspecs.ui.com/unifi/accessories/usp-rps",
+      "publisher": "Ubiquiti",
+      "title": "UniFi Redundant Power - Tech Specs",
+      "retrieved_on": "2026-11-23",
+      "evidence_note": "Official specifications list one 1 GbE RJ45 management interface, six RPS DC output ports, and distinct maximum output rails of 52 V DC at 600 W and 11.5 V DC at 350 W. Rail ratings are separate static capacities, not one combined runtime power reading; no per-output rail assignment is inferred."
+    }
+  ],
+  "fields_supported": [
+    "canonical_sku",
+    "display_name",
+    "management_interface",
+    "dc_outputs.topology",
+    "dc_power_rails"
+  ],
+  "notes": "The six RPS DC outputs are modeled separately from the single Ethernet management interface, without inferring per-output rail assignments. The 52 V/600 W and 11.5 V/350 W rail capacities remain separate; no combined capacity is calculated and no runtime state is stored in this Catalog model."
+}

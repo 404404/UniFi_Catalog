@@ -1,0 +1,11 @@
+{
+  "id": "runtime-usp-rps-controller-identity-20261122",
+  "kind": "qualified_controller",
+  "canonical_sku": "USP-RPS",
+  "supports": {
+    "api_model": "USP RPS",
+    "legacy_model": "USPRPS"
+  },
+  "observed_on": "2026-11-22",
+  "source_note": "Repeated read-only observations from the existing UniFi Controller integration API devices list/detail and the existing legacy stat/device response identified one same RPS device as API devices.data[].model=USP RPS and legacy stat/device data[].model=USPRPS. The collection uses the existing exact internal device identity join; raw controller IDs, MAC addresses, names, and payloads are intentionally omitted."
+}
